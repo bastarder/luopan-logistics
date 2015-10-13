@@ -1,0 +1,44 @@
+{% extends "Base/main.html" %}
+{% block content %}
+{% csrf_token %}
+<!--共享界面-->
+
+<div class="col-md-2 borderword">
+  <div class="row buttons" id="lefttab2">
+    <a class="" href="/post_leave/">
+        <span class="glyphicon glyphicon-home"></span>
+        提交请假单
+    </a>
+    <a class="" href="/my_leave">
+        <span class="glyphicon glyphicon-user"></span>
+        我的请假条
+    </a>
+    {% if perms.login.can_rs %}
+    <a class="" href="/all_leave">
+        <span class="glyphicon glyphicon-user"></span>
+        所有人的请假单
+    </a>
+    {% endif %}
+    {% if not perms.login.can_cy %}
+    <a class="" href="/public/">
+        <span class="glyphicon glyphicon-user"></span>
+        处理请假单
+    </a>
+    {% endif %}
+  </div>
+  </div>
+  <div class="col-md-10" style="background-color:white;" id="righttab2">
+  {% block public %}{% endblock %}
+  </div>
+
+  <script>
+  $(document).ready(
+  function () {
+    if ($("#lefttab2").height() < $("#righttab2").height())
+    {
+      $("#lefttab2").height($("#righttab2").height())
+    }
+  }
+  )
+  </script>
+{% endblock %}

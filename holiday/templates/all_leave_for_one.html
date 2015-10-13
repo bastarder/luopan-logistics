@@ -1,0 +1,54 @@
+{% extends "HolidayBase/holiday_main.html" %}
+
+{% block public %}
+
+<style>
+  .title{
+    background-color: blue;
+    color: white;
+  }
+</style>
+
+<body>
+{% csrf_token %}
+  <table class="table table-bordered">
+    <tr>
+      <th class="title" colspan="6">请假单</th>
+    </tr>
+    <tr>
+      <th>上传日期</th>
+      <th>姓名</th>
+      <th>是否生效</th>
+      <th>请假类型</th>
+      <th>提前申请</th>
+      <th>操作</th>
+    </tr>
+  {% for a in LeaveList %}
+  <tr>
+    <td>{{a.pub_date}}</td>
+    <td><a href="/change_leave/?id={{a.id}}">[ {{a.person.name}} ] 的请假单</a></td>
+    <td>
+      {% if a.is_right == '1' %}
+      <span class="glyphicon glyphicon-ok"></span>
+      {% else %}
+      <span class="glyphicon glyphicon-remove"></span>
+      {% endif %}
+    </td>
+    <td>
+      {{a.vacation_type_employee}}
+    </td>
+    <td>
+      {% if a.is_date_right == '0' %}
+      <span class="glyphicon glyphicon-ok"></span>
+      {% else %}
+      <span class="glyphicon glyphicon-remove"></span>
+      {% endif %}
+    </td>
+    <td>
+      <a class="btn btn-info" href="/all_leave_delete/?LeaveID={{a.id}}">删除</a>
+    </td>
+  </tr>
+  {% endfor %}
+  </table>
+</body>
+{% endblock %}

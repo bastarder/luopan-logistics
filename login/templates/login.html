@@ -1,0 +1,41 @@
+{% extends "Base/Base.html" %}
+{% block content %}
+<body>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 title">
+           <h1> 0 0 0 0 </h1>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <br>
+    <br>
+
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <form class="form-horizontal" action='/login/' method='post'>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+            <input class="form-control input-lg" aria-label="Amount (to the nearest dollar)" type="text"name="username"/>
+          </div>
+          <br>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+            <input class="form-control input-lg" aria-label="Amount (to the nearest dollar)" type="text"name="password"/>
+          </div>
+          <!--错误信息提示-->
+          {% if errors %}
+            {% for a in errors %}
+                <p style="color:red;font-size:20px;">{{a}}</p>
+            {% endfor %}
+          {% endif %}
+          <br>
+          <button type="submit" class="btn btn-success btn-block btn-lg" > 登 陆 </button>
+          <a href="/register" class="btn register"> 注 册 </a>
+        </form>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+</body>
+{% endblock %}

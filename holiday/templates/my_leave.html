@@ -1,0 +1,42 @@
+{% extends "HolidayBase/holiday_main.html" %}
+{% block public %}
+
+<body>
+{% csrf_token %}
+<table class="table table-bordered">
+    <tr>
+        <td class="titlestyle" colspan ="4" style="text-align:center">以下是您所有的请假单</td>
+    </tr>
+    <tr>
+        <th>日期</th>
+        <th>申请人</th>
+        <th>部门经理确认</th>
+        <th>Coo确认</th>
+        <th>操作</th>
+    </tr>
+    {% for a in MyLeave %}
+        <tr>
+            <td>{{a.pub_date}}</td>
+            <td><a href="/change_leave/?id={{a.id}}">{{a.person.name}}</a></td>
+            {% if a.manager_signature %}
+            <td><span class="glyphicon glyphicon-ok"></span></td>
+            {% else %}
+            <td><span class="glyphicon glyphicon-remove"></span></td>
+            {% endif %}
+            {% if a.coo_signature %}
+            <td><span class="glyphicon glyphicon-ok"></span></td>
+            {% else %}
+            <td><span class="glyphicon glyphicon-remove"></span></td>
+            {% endif %}
+            <td>
+              {% if a.is_right == '0' %}
+                  <a class="btn btn-info" href="/delete_view/?id1={{a.id}}&id2=myleave">删除</a>
+              {% else %}
+                  已生效,无法删除
+              {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+  </table>
+</body>
+{% endblock %}

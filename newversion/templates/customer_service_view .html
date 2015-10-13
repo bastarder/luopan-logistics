@@ -1,0 +1,46 @@
+{% extends "version.html" %}
+
+{% block version %}
+
+{% load staticfiles %}
+<style>
+.labels{
+  border-radius: 5px;
+  background-color: #CAE1FF;
+  padding: 1px 2px 1px 2px;
+}
+</style>
+
+<body>
+{% csrf_token %}
+
+<br>
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-10">
+    {% for a in customer_bug %}
+      {{a.0}}
+      {% for b in a.1 %}
+        <span class="labels">{{b}}</span>
+      {% endfor %}
+      <br>
+    {% endfor %}
+  </div>
+</div>
+<nav>
+  <ul class="pagination">
+    <li>
+      {% if up_page < 1 %}
+        <a href="/customer_service_view/?page=1">上一页</a>
+      {% else %}
+        <a href="/customer_service_view/?page={{up_page}}">上一页</a>
+      {% endif %}
+    </li>
+{% for a in page_all %}
+    <li><a href="/customer_service_view/?page={{a}}">{{a}}</a></li>
+{% endfor %}
+    <li><a href="/customer_service_view/?page={{down_page}}">下一页</a></li>
+  </ul>
+</nav>
+</body>
+{% endblock %}

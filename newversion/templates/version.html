@@ -1,0 +1,19 @@
+{% extends "Base/main.html" %}
+
+{% block content %}
+
+{% load staticfiles %}
+<style>
+
+</style>
+
+<body>
+{% csrf_token %}
+<ol class="breadcrumb">
+  <li><a href="/customer_view/?project_id=1&page=1">客户系统</a></li>
+  <li><a href="/customer_view/?project_id=2&page=1">客服系统</a></li>
+</ol>
+{% block version %}{% endblock %}
+</body>
+
+{% endblock %}

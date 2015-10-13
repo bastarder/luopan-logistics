@@ -1,0 +1,160 @@
+{% extends "HolidayBase/holiday_main.html" %}
+
+{% block public %}
+
+{% load staticfiles %}
+<style>
+.tablemain input{
+  border: none;
+}
+.tablemain select{
+  border: none;
+}
+.renshi .col-md-10 .input-group{
+  margin: 10;
+}
+</style>
+
+<body onload="showdate()">
+{% csrf_token %}
+
+<div class="row">
+<form class="form-horizontal" action='/post_leave/' method='post'>
+    <div class="row"> <!--logo+标题-->
+        <div class="col-md-5"><img src="{% static 'login/luopanlogo.jpg' %}" width="128" height="128"></div>
+        <div class="col-md-6"><h1>请假单</h1></div>
+    </div>
+  <div class="row"> <!--主要信息bug-->
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <table class="table table-bordered tablemain">
+        <tr>
+          <td><h4>姓名</h4> <input readonly="readonly" type="text" name="name" value="{{person.name}}"/></td>
+          <td><h4>入职日期</h4> <input type="text" name="entry_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/></td>
+          <td><h4>员工号</h4> <input readonly="readonly" type="text" name="employee_number" value="{{person.person_number}}"/></td>
+        </tr>
+        <tr>
+         <td><h4>职位</h4> <input readonly="readonly" type="text"name="position" value="{{person.position}}"/></td>
+         <td><h4>部门</h4> <input readonly="readonly" type="text"name="department" value="{{person.department}}"/></td>
+         <td><h4>填表日期</h4> <input readonly="readonly" type="text"name="filling_date" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" id="datePicker"/></td>
+        </tr>
+      </table>
+   </div>
+   <div class="col-md-1"></div>
+  </div>
+
+  <div class="row"> <!--假期时间-->
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+
+      <div class="input-group">
+        <span class="input-group-addon">休假期 由</span>
+        <input class="form-control" aria-label="Amount (to the nearest dollar)" type="text"name="start_date"onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="{{detail.start_date|date:"Y-m-d"}}"/>
+        <span class="input-group-addon">至</span>
+        <input class="form-control" aria-label="Amount (to the nearest dollar)" type="text"name="end_date"onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="{{detail.end_date|date:"Y-m-d"}}"/>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">复职日期</span>
+        <input class="form-control" aria-describedby="basic-addon1" type="text"name="reinstatement_date" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"value="{{detail.reinstatement_date|date:"Y-m-d"}}"/>
+        <span class="input-group-addon" id="basic-addon1">总有薪数</span>
+        <input class="form-control" aria-describedby="basic-addon1"type="text"name="total_pay" value="{{detail.total_pay}}"/>
+        <span class="input-group-addon" id="basic-addon1">休假种类</span>
+        <input class="form-control" aria-describedby="basic-addon1"type="text"name="vacation_type_employee" value="{{detail.vacation_type_employee}}"/>
+      </div>
+        <h4>备注：</h4> <textarea class="form-control" type="text" name="remarks" value="{{detail.remarks}}">{{detail.remarks}}</textarea>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+
+  <div class="row"> <!--休假类型参考表-->
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <br>
+      <table class="table table-bordered">
+        <tr>
+          <td>本休 R</td>
+          <td>年假 AL</td>
+          <td>公出 B</td>
+          <td>产假 ML</td>
+        </tr>
+        <tr>
+          <td>法定假期 PH</td>
+          <td>事假 UPL</td>
+          <td>丧假 CL</td>
+          <td>陪产假 PL</td>
+        </tr>
+        <tr>
+          <td>换休 TO</td>
+          <td>婚假 MAL</td>
+          <td>有薪/扣薪病假 MLP/MLWP</td>
+          <td>其他 O</td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+
+  <div class="row renshi"> <!--仅供人事填写-->
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <h3>人事填写</h3>
+      <hr>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">休假种类</span>
+        <input readonly="readonly"type="text" class="form-control" aria-describedby="basic-addon1" type="text"name="vacation_type">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">应该享有</span>
+        <input readonly="readonly"type="text" class="form-control" aria-describedby="basic-addon1" type="text" name="should_enjoy"/>
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">已经提取</span>
+        <input readonly="readonly"type="text" class="form-control" aria-describedby="basic-addon1" type="text" name="extracted"/>
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">本次申请</span>
+        <input readonly="readonly"type="text" class="form-control" aria-describedby="basic-addon1" type="text" name="this_times"/>
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">剩余次数</span>
+        <input readonly="readonly"type="text" class="form-control" aria-describedby="basic-addon1" type="text" name="left_times"/>
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">有效期至</span>
+        <input readonly="readonly"type="text" class="form-control" aria-describedby="basic-addon1" type="text" name="effective_date"/>
+      </div>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <hr>
+      <h3>签字确认:(填入日期即为确认)</h3>
+      <table class="table table-bordered tablemain">
+        <tr>
+          <td> 员工签字：<input readonly="readonly" type="text" name="employee_signature" id="datePicker1"/> </td>
+          <td> 部门经理签字：<input readonly="readonly" type="text" name="manager_signature" /> </td>
+          <td> Coo签字：<input readonly="readonly" type="text" name="coo_signature" /> </td>
+        </tr>
+      </table>
+      <input type="submit" class="btn btn-primary btn-lg btn-block" value="提交" align="center" class = "form"/>
+      <input type="button" class="btn btn-success btn-lg btn-block"onclick="history.go(-1)" value="取消">
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+
+</form>
+</div>
+</body>
+<script>
+function showdate(){
+   var d = new Date();
+   var day = String(Number(d.getMonth())+1)
+   document.getElementById('datePicker').value = d.getFullYear()+"-"+day+"-"+d.getDate();
+   document.getElementById('datePicker1').value = d.getFullYear()+"-"+day+"-"+d.getDate();
+}
+</script>
+{% endblock %}
