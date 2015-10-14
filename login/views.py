@@ -20,7 +20,7 @@ def logins(request):
                 test = request.user.person_set.all()[0]
             except:
                 logout(request)
-            return HttpResponseRedirect('/login/')
+            return HttpResponseRedirect('/welcome/')
         else:
             return render_to_response('login.html')
     else:
