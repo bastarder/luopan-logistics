@@ -16,7 +16,7 @@
   .nav{
     /*background-color: #2E2E2E;*/
     /*#449d44/#398439*/
-    background-color: #2E2E2E;  /*淡*/
+    background-color: #2b333d;  /*淡*/
     height: 800px;
   }
   .nav-right{
@@ -36,26 +36,29 @@
   }
   .buttons a{
     display: block;
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    font-size: 17px;
+    height: 40px;
+    line-height: 40px;
+    text-align: left;
+    font-size: 14px;
     color: #CAE1FF;
     background-color: #1E1E1E;
     margin-bottom: 1px;
+    position: relative;
+    left:31px;
+    width: 212px;
   }
 
   .buttons{
     height: 680px;
-    background-color: #2E2E2E;  /*淡*/
+    background-color: #2b333d;  /*淡*/
   }
   .buttons a:hover{
     text-decoration: none;
-    background-color: #2E2E2E;
+    background-color: #2b333d;
     border: 1px solid #1E1E1E;
   }
   .right-down{
-    padding: 10px 30px 10px 10px;
+    padding: 10px 40px 10px 25px;
   }
   .in-right-down{
     height: 720px;
@@ -75,19 +78,33 @@
   <div class="row">
     <div class="col-md-2 nav" id='lefttab'>
       <div class="row imglogo">
-        <h3><span class="glyphicon glyphicon-refresh"></span>&nbsp;后 勤 管 理</h3>
+        <h3><span class=" glyphicon glyphicon-random"></span></h3>
       </div>
       <br>
       <div class="row buttons">
-        <a class="" href="/welcome/"><span class="glyphicon glyphicon-home"></span>  我的信息</a>
-        <a class="" href="/my_leave/"><span class="glyphicon glyphicon-tag"></span>  请假条</a>
-        {% if perms.login.can_js %}
-        <a class="" href="/bugview/bug_view">
-          <span class="glyphicon glyphicon-asterisk"></span>  BUG修复签到
-        </a>
-        {% endif %}
-        <a class="" href="/customer_view/"><span class="glyphicon glyphicon-list-alt"></span>  版本更新详情</a>
-        <a class="" href="/signout/"><span class="glyphicon glyphicon-log-out"></span>  退出登陆</a>
+          <a class="" href="/welcome/">
+            &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-home"aria-hidden="true"></span>
+            &nbsp;&nbsp;&nbsp;我的信息
+          </a>
+          <a class="" href="/my_leave/">
+            &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-tag"></span>
+            &nbsp;&nbsp;&nbsp;请假条
+          </a>
+          {% if perms.login.can_js %}
+          <a class="" href="/bugview/bug_view">
+            &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-asterisk"></span>
+            &nbsp;&nbsp;&nbsp;BUG修复签到
+          </a>
+          {% endif %}
+          <a class="" href="/customer_view/">
+            &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-list-alt"></span>
+            &nbsp;&nbsp;&nbsp;版本更新详情
+          </a>
+          <br>
+          <a class="" id="signout" href="/signout/">
+            &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-log-out"></span>
+            &nbsp;&nbsp;&nbsp;退出登陆
+          </a>
       </div>
 
     </div>
@@ -101,12 +118,12 @@
 </body>
 <script>
 $(document).ready(
-  function () {
+function () {
     if ($("#lefttab").height() < $("#righttab").height())
     {
       $("#lefttab").height($("#righttab").height()+10)
     }
-}
-)
+})
+
 </script>
 </html>

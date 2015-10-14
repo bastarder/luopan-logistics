@@ -2,43 +2,60 @@
 {% block content %}
 {% csrf_token %}
 <!--共享界面-->
-
-<div class="col-md-2 borderword">
-  <div class="row buttons" id="lefttab2">
-    <a class="" href="/post_leave/">
+<style>
+  .holiday-nav{
+    background: white;
+    height: 50px;
+    line-height: 50px;
+    text-align:center;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+  .holiday-public{
+    border: 1px solid #ddd;
+  }
+  .holiday-nav a{
+    color: #7f8fa4;
+    font-size: 20px;
+    padding-top: 12px;
+    padding-right: 30px;
+    position: relative;
+    top:-2px;
+  }
+  .holiday-nav a:hover{
+    color: black;
+  }
+  .holiday-nav span{
+    color: #7f8fa4;
+  }
+</style>
+<div class="row">
+    <div class="col-md-12 holiday-nav">
+    <a class="btn " href="/post_leave/">
         <span class="glyphicon glyphicon-home"></span>
         提交请假单
-    </a>
-    <a class="" href="/my_leave">
-        <span class="glyphicon glyphicon-user"></span>
+    </a><span>|</span>
+    <a class="btn " href="/my_leave">
+        <span class="glyphicon glyphicon-bookmark"></span>
         我的请假条
-    </a>
+    </a><span>|</span>
     {% if perms.login.can_rs %}
-    <a class="" href="/all_leave">
-        <span class="glyphicon glyphicon-user"></span>
+    <a class="btn " href="/all_leave">
+        <span class="glyphicon glyphicon-folder-open"></span>
         所有人的请假单
-    </a>
+    </a><span>|</span>
     {% endif %}
     {% if not perms.login.can_cy %}
-    <a class="" href="/public/">
-        <span class="glyphicon glyphicon-user"></span>
+    <a class="btn " href="/public/">
+        <span class="glyphicon glyphicon-check"></span>
         处理请假单
-    </a>
+    </a><span>|</span>
     {% endif %}
   </div>
+  <div class="col-md-12 holiday-public">
+    <br>
+      {% block public %}{% endblock %}
   </div>
-  <div class="col-md-10" style="background-color:white;" id="righttab2">
-  {% block public %}{% endblock %}
-  </div>
+</div>
 
-  <script>
-  $(document).ready(
-  function () {
-    if ($("#lefttab2").height() < $("#righttab2").height())
-    {
-      $("#lefttab2").height($("#righttab2").height())
-    }
-  }
-  )
-  </script>
 {% endblock %}
