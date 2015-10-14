@@ -12,7 +12,6 @@ from django.template import RequestContext
 
 # 登陆 视图函数
 def logins(request):
-    #删除登陆缓存
     #ss=Session.objects.all()
     #ss.delete()
     if not request.POST:
