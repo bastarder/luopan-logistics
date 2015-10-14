@@ -21,7 +21,7 @@ def logins(request):
                 test = request.user.person_set.all()[0]
             except:
                 logout(request)
-            return HttpResponseRedirect('/welcome/')
+            return HttpResponseRedirect('/login/')
         else:
             return render_to_response('login.html')
     else:
@@ -62,7 +62,7 @@ def register(request):
         for a in user:
             if a.username == items['username']:
                 errors.append('此账号已存在！')
-            if a.username == items['name']:
+            if a.last_name == items['name']:
                 errors.append('此人已存在！')
         # 如果有错误信息，初始化 空白 表单 ，显示错误 项
         if errors:
