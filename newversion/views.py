@@ -12,7 +12,7 @@ from django.template import RequestContext
 import time
 import datetime
 import calendar
-import xlwt
+#import xlwt
 import httplib, urllib,json
 
 def customer_view(request):
