@@ -83,10 +83,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'app_houqinguanli2',    #你的数据库名称
-        'USER': 'SAE_MYSQL_USER',   #你的数据库用户名
-        'PASSWORD': 'SAE_MYSQL_PASS', #你的数据库密码
-        'HOST': 'SAE_MYSQL_HOST_M', #你的数据库主机，留空默认为localhost
-        'PORT': 'SAE_MYSQL_PORT', #你的数据库端口
+        'USER': SAE_MYSQL_USER,   #你的数据库用户名
+        'PASSWORD': SAE_MYSQL_PASS, #你的数据库密码
+        'HOST': SAE_MYSQL_HOST_M, #你的数据库主机，留空默认为localhost
+        'PORT': SAE_MYSQL_PORT, #你的数据库端口
     }
 }
 
