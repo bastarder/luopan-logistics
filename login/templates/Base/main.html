@@ -1,0 +1,140 @@
+{% load staticfiles %}
+<html>
+<head>
+<link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{% static 'login/My97DatePicker/WdatePicker.js' %}"></script>
+<style>
+  *{
+    margin: 0;
+    padding: 0;
+  }
+  body{
+    /*background-color: #CAE1FF;*/
+  }
+  .nav{
+    /*background-color: #2E2E2E;*/
+    /*#449d44/#398439*/
+    background-color: #2b333d;  /*淡*/
+    height: 800px;
+  }
+  .nav-right{
+    color: black;
+    font-size: 20px;
+    height: 60px;
+    line-height: 60px;
+    background-color: white;
+  }
+
+  .imglogo{
+    background-color: #1E1E1E;
+    color: #CAE1FF;
+    height: 60px;
+    line-height: 60px;
+  }
+  .imglogo img{
+      position: relative;
+      left:40px;
+  }
+  .buttons a{
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    text-align: left;
+    font-size: 14px;
+    color: #CAE1FF;
+    background-color: #1E1E1E;
+    margin-bottom: 1px;
+    position: relative;
+    left:31px;
+    width: 212px;
+  }
+
+  .buttons{
+    height: 680px;
+    background-color: #2b333d;  /*淡*/
+  }
+  .buttons a:hover{
+    text-decoration: none;
+    background-color: #2b333d;
+    border: 1px solid #1E1E1E;
+  }
+  .right-down{
+    padding: 10px 40px 10px 25px;
+    /*border: 1px solid #CAE1FF;*/
+    /*border-radius: 15px;*/
+  }
+  .in-right-down{
+    height: 720px;
+    overflow:auto;
+    background-color: white;
+  }
+  .glyphicon{
+    color: #CAE1FF;
+  }
+  table span.glyphicon{
+    color: black;
+  }
+  .main-title{
+    position: relative;
+    left:44px;
+    font-size: 20px;
+  }
+</style>
+</head>
+<body>
+{% csrf_token %}
+  <div class="row">
+    <div class="col-md-2 nav" id='lefttab'>
+      <div class="row imglogo">
+        <img src="{% static 'login/luopanlogo-o.png' %}" width="47" height="40">
+        <span class="main-title">后 勤 管 理</span>
+      </div>
+      <br>
+      <div class="row buttons">
+          <a class="" href="/welcome/">
+            &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-home"aria-hidden="true"></span>
+            &nbsp;&nbsp;&nbsp;我的信息
+          </a>
+          <a class="" href="/my_leave/">
+            &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-tag"></span>
+            &nbsp;&nbsp;&nbsp;请假条
+          </a>
+          {% if perms.login.can_js %}
+          <a class="" href="/bugview/bug_view">
+            &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-asterisk"></span>
+            &nbsp;&nbsp;&nbsp;BUG修复签到
+          </a>
+          {% endif %}
+          <a class="" href="/customer_view/">
+            &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-list-alt"></span>
+            &nbsp;&nbsp;&nbsp;版本更新详情
+          </a>
+          <br>
+          <a class="" id="signout" href="/signout/">
+            &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-log-out"></span>
+            &nbsp;&nbsp;&nbsp;退出登陆
+          </a>
+      </div>
+
+    </div>
+    <div class="col-md-10 ss">
+      <div class="row right-down" id="righttab" style="background-color:white;">
+            {% block content %}{% endblock %}
+      </div>
+    </div>
+    </div>
+  </div>
+</body>
+<script>
+$(document).ready(
+function () {
+    if ($("#lefttab").height() < $("#righttab").height())
+    {
+      $("#lefttab").height($("#righttab").height()+10)
+    }
+})
+
+</script>
+</html>

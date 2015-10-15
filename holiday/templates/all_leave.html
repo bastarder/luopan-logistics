@@ -1,0 +1,42 @@
+{% extends "HolidayBase/holiday_main.html" %}
+
+{% block public %}
+
+<style>
+  .title{
+    background-color: blue;
+    color: white;
+  }
+  a{
+    font-size: 20px;
+  }
+  a:hover{
+    text-decoration: none;
+  }
+</style>
+
+<body>
+{% csrf_token %}
+  <div class="row">
+  <div class="col-md-10">
+  <table class="table table-bordered">
+  <tr>
+    <td class="title">编号</td>
+    <td class="title">姓名</td>
+  </tr>
+
+    {% for pe in person %}
+  <tr>
+    <td>
+      {{forloop.counter}}
+    </td>
+      <td>
+        <a href="/all_leave_for_one/?PersonID={{pe.id}}">{{pe.name}}</a>
+      </td>
+  </tr>
+    {% endfor %}
+  </table>
+  </div>
+  </div>
+</body>
+{% endblock %}

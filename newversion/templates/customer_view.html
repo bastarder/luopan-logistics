@@ -1,0 +1,62 @@
+{% extends "version.html" %}
+
+{% block version %}
+
+{% load staticfiles %}
+<style>
+.labels{
+  border-radius: 5px;
+  background-color: #CAE1FF;
+  padding: 1px 2px 1px 2px;
+}
+</style>
+
+<body>
+{% csrf_token %}
+<div class="row">
+  <div class="col-md-10">
+    <table class="table">
+      <tr>
+          <th>ID</th>  <!--iid-->
+          <th>
+            修复内容 - [ {{system_name}} 第 {{now_page}} 页 ]
+          </th>
+      </tr>
+      {% for a in customer_bug %}
+      <tr>
+          <td>#{{a.2}}</td>
+          <td><!--&#10;换行符-->
+              <span
+              title="创建: {{a.3}}
+关闭: {{a.4}}
+创建人:{{a.5}}
+解决人:{{a.6}}">{{a.0}}</span>
+              {% for b in a.1 %}
+                <span class="labels">{{b}}</span>
+              {% endfor %}
+          </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <nav>
+      <ul class="pagination">
+        <li>
+          {% if up_page < 1 %}
+            <a href="/customer_view/?project_id={{project_id}}&page=1">上一页</a>
+          {% else %}
+            <a href="/customer_view/?project_id={{project_id}}&page={{up_page}}">上一页</a>
+          {% endif %}
+        </li>
+    {% for a in page_all %}
+        <li><a href="/customer_view/?project_id={{project_id}}&page={{a}}">{{a}}</a></li>
+    {% endfor %}
+        <li><a href="/customer_view/?project_id={{project_id}}&page={{down_page}}">下一页</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+</body>
+<script>
+</script>
+{% endblock %}

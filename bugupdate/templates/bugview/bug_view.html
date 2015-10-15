@@ -1,0 +1,163 @@
+{% extends "Base/main.html" %}
+{% block content %}
+
+<style>
+  *{
+    margin: 0px;
+    padding: 0px;
+  }
+  .test1{
+    display: inline-block;
+  }
+  .noneth{
+    background-color: #FFF0F5;
+  }
+  .rowdate td{
+    width: 120px;
+    height: 120px;
+  }
+  .names{
+    background-color: blue;
+    border-radius: 5px;
+    color: white;
+    padding: 1px 0px 1px 0px;
+  }
+  .showadd{
+    display: none;
+  }
+  .rowdate{
+  position: relative;
+  left: 18px;
+  }
+  .titlerows{
+    background-color: #FFF0F5;
+  }
+</style>
+
+<body>
+{% csrf_token %}
+<!--选择显示月份-->
+<p></p>
+{% if perms.login.can_js %}
+<form class="form-horizontal test" action='' method='GET'>
+  <div class="form-group">
+    <label for="yearmonth" class="col-sm-1 choicemonth control-label">选择月份:</label>
+    <div class="col-sm-2 ">
+    <input name="yearmonth"
+                    class="yearmonth  form-control"
+                    onClick="WdatePicker({skin:'default',dateFmt:'yyyy-MM'})"
+                    readonly="readonly"
+                    placeholder="当前选择日期：{{choice_year}}-{{choice_month}}"
+                    type="text"
+                    value="{{choice_year}}-{{choice_month}}"/>
+  </div>
+  <input type="submit" class="btn btn-default" value="搜索" align="center" class = "form"/>
+  <label class="btn btn-default"
+          onclick="showadd()">我要签到</label>
+</form>
+<form class="form-horizontal test1" action='/bugview/Report_view' method='GET'>
+    <input type="hidden" name="getyear"  value="{{choice_year}}"/>
+    <input type="hidden" name="getmonth"  value="{{choice_month}}"/>
+    <input type="hidden" class="checkoutput"name="OutExcel" value="0"/>
+    <input type="checkbox" class="checkoutput"name="OutExcel" value="1" />导出列表
+    <input type="submit" class="btn btn-default" value="月报表视图" align="center" class = "form"/>
+    <small>比需先搜索出指定的月份才能打印，否则默认为当前所在月份</small>
+</form>
+
+<form class="form-horizontal showadd" action='/bugview/close_view/' method='POST'>
+  <div class="form-group">
+    <!--<label for="persons" class="col-sm-2 control-label">处理人</label>-->
+    <div class="col-sm-8">
+      <input  readonly="readonly"
+              type="hidden"
+              class="form-control"
+              name="persons"
+              id="persons"
+              value="{{bugname}}"
+              />
+    </div>
+  </div>
+
+<div class="form-group">
+<label for="issue_id" class="col-sm-2 control-label">BUG编号</label>
+<div class="col-sm-8">
+  <input type="text"
+          class="form-control"
+          name="issue_id"
+          id="issue_id"/>
+</div>
+</div>
+
+<div class="form-group">
+<label for="finish_date" class="col-sm-2 control-label">完成日期</label>
+<div class="col-sm-8">
+  <input type="text"
+          id="datePicker"
+          class="form-control"
+          name="finish_date"
+          onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+          readonly="readonly"
+          value="{% now "Y-m-d"%}" />
+</div>
+</div>
+
+<div class="form-group">
+<div class="col-sm-offset-2 col-sm-8">
+  <input type="submit" class="btn btn-info btn-lg btn-block" value="提交" align="center" class = "form"/>
+</div>
+</div>
+</form>
+<p></p>
+<table class="rowdate table table-bordered">
+<thead>
+<tr>
+  <th>星期一</th>
+  <th>星期二</th>
+  <th>星期三</th>
+  <th>星期四</th>
+  <th>星期五</th>
+  <th>星期六</th>
+  <th>星期日</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+{% for a in tabledate %}
+{% if a.0 < 1 or a.0 > 31 %}
+<td class="noneth"></td>
+{% else %}
+<td>
+  {{a.0}}日<br>
+  {% for b in a.1%}
+      <span class="names">&nbsp;{{b}}&nbsp;</span>
+      <br>
+  {% endfor %}
+</td>
+{% endif %}
+{% if forloop.counter == 7 or forloop.counter == 14 or forloop.counter == 21 or forloop.counter == 28 or forloop.counter == 35 %}
+</tr>
+<tr>
+{% endif %}
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+  <h1>&nbsp;对不起，您不属于[技术部]，因此无法使用此功能！</h1>
+{% endif %}
+</body>
+<script>
+var flag=1;
+function showadd() {
+  if(flag==1){
+    $('.showadd').css('display','block');
+    flag=0;
+    }
+  else{
+    $('.showadd').css('display','none');
+    flag=1;
+  }
+}
+
+</script>
+
+{% endblock %}

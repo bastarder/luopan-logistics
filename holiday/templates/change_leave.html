@@ -1,0 +1,171 @@
+{% extends "HolidayBase/holiday_main.html" %}
+
+{% block public %}
+{% load staticfiles %}
+<style>
+.tablemain input{
+  border: none;
+}
+.renshi .col-md-10 .input-group{
+  margin: 10;
+}
+</style>
+{% csrf_token %}
+{% if perms.login.can_rs %}
+<body onload="set_all()">
+{% else %}
+<body>
+{% endif %}
+<!--主要表单-->
+<form class="form-horizontal" action='/change_leave/' method='post'>
+    <div class="row"> <!--logo+标题-->
+        <div class="col-md-1"></div>
+        <div class="col-md-4"><img src="{% static 'login/luopanlogo.jpg' %}" width="128" height="128"></div>
+        <div class="col-md-6"><h1>请假单</h1></div>
+        <div class="col-md-1"></div>
+    </div>
+  <div class="row"> <!--主要信息bug-->
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <table class="table table-bordered tablemain">
+        <tr>
+          <input type="hidden" name="change_id" value="{{detail.id}}"/>
+          <td><h4>姓名</h4> <input readonly="readonly"type="text"name="name" value="{{detail.person.name}}"/></td>
+          <td><h4>入职日期</h4> <input readonly="readonly"type="text" name="entry_time" value="{{detail.entry_time}}"/></td>
+          <td><h4>员工号</h4> <input readonly="readonly"type="text" name="employee_number" value="{{detail.employee_number}}"/></td>
+        </tr>
+        <tr>
+         <td><h4>职位</h4> <input readonly="readonly"type="text"name="position" value="{{detail.position}}"/></td>
+         <td><h4>部门</h4> <input readonly="readonly"type="text"name="department" value="{{detail.department}}"/></td>
+         <td><h4>填表日期</h4> <input readonly="readonly"type="text"name="filling_date" value="{{detail.filling_date}}"/></td>
+        </tr>
+      </table>
+   </div>
+   <div class="col-md-1"></div>
+  </div>
+
+  <div class="row"> <!--假期时间-->
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+
+      <div class="input-group">
+        <span class="input-group-addon">休假期 由</span>
+        <input readonly="readonly"class="form-control" aria-label="Amount (to the nearest dollar)" type="text"name="start_date" value="{{detail.start_date}}"/>
+        <span class="input-group-addon">至</span>
+        <input readonly="readonly"class="form-control" aria-label="Amount (to the nearest dollar)" type="text"name="end_date" value="{{detail.end_date}}"/>
+      </div>
+      <br>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">复职日期</span>
+        <input readonly="readonly"class="form-control" aria-describedby="basic-addon1" type="text"name="reinstatement_date" value="{{detail.reinstatement_date}}"/>
+        <span class="input-group-addon" id="basic-addon1">总有薪数</span>
+        <input readonly="readonly"class="form-control" aria-describedby="basic-addon1"type="text"name="total_pay" value="{{detail.total_pay}}"/>
+        <span class="input-group-addon" id="basic-addon1">休假种类</span>
+        <input readonly="readonly"class="form-control" aria-describedby="basic-addon1"type="text"name="vacation_type_employee" value="{{detail.vacation_type_employee}}"/>
+      </div>
+        <h4>备注：</h4> <textarea readonly="readonly" class="form-control" type="text" name="remarks" value="{{detail.remarks}}">{{detail.remarks}}</textarea>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+
+  <div class="row"> <!--休假类型参考表-->
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <br>
+      <table class="table table-bordered">
+        <tr>
+          <td>本休 R</td>
+          <td>年假 AL</td>
+          <td>公出 B</td>
+          <td>产假 ML</td>
+        </tr>
+        <tr>
+          <td>法定假期 PH</td>
+          <td>事假 UPL</td>
+          <td>丧假 CL</td>
+          <td>陪产假 PL</td>
+        </tr>
+        <tr>
+          <td>换休 TO</td>
+          <td>婚假 MAL</td>
+          <td>有薪/扣薪病假 MLP/MLWP</td>
+          <td>其他 O</td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+
+<div class="row renshi"> <!--仅供人事填写-->
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <h3>人事填写</h3>
+    <hr>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">休假种类</span>
+      <input readonly="readonly"type="text" class="form-control" aria-describedby="basic-addon1" type="text"name="vacation_type" value="{{detail.vacation_type}}">
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">应该享有</span>
+      <input readonly="readonly"type="text" class="form-control" aria-describedby="basic-addon1" type="text"name="should_enjoy" value="{{detail.should_enjoy}}"/>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">已经提取</span>
+      <input readonly="readonly"type="text" class="form-control" aria-describedby="basic-addon1" type="text"name="extracted" value="{{detail.extracted}}"/>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">本次申请</span>
+      <input readonly="readonly"type="text" class="form-control" aria-describedby="basic-addon1" type="text"name="this_times" value="{{detail.this_times}}"/>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">剩余次数</span>
+      <input readonly="readonly"type="text" class="form-control" aria-describedby="basic-addon1" type="text"name="left_times" value="{{detail.left_times}}"/>
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">有效期至</span>
+      <input readonly="readonly"type="text" class="form-control" aria-describedby="basic-addon1" type="text"name="effective_date" value="{{detail.effective_date}}"/>
+    </div>
+  </div>
+  <div class="col-md-1"></div>
+</div>
+
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <hr>
+      <h3>签字确认:(填入日期即为确认)</h3>
+      <table class="table table-bordered tablemain">
+        <tr>
+          <td> 员工签字：<input readonly="readonly" type="text"name="employee_signature" value="{{detail.employee_signature}}"/> </td>
+          {% if perms.login.can_bmjl or perms.login.can_Coo %}
+          <td> 部门经理签字：<input type="text"name="manager_signature" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="{{detail.manager_signature}}"/> </td>
+          {% else %}
+          <td> 部门经理签字：<input readonly="readonly" type="text" name="manager_signature" value="{{detail.manager_signature}}"/> </td>
+          {% endif %}
+
+          {% if perms.login.can_Coo %}
+          <td> Coo签字：<input type="text"name="coo_signature" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="{{detail.coo_signature}}"/> </td>
+          {% else %}
+          <td> Coo签字：<input readonly="readonly" type="text" name="coo_signature" value="{{detail.coo_signature}}"/> </td>
+          {% endif %}
+        </tr>
+      </table>
+      <input type="submit" class="btn btn-primary btn-lg btn-block" value="提交" align="center" class = "form"/>
+      <input type="button" class="btn btn-success btn-lg btn-block"onclick="history.go(-1)" value="取消">
+
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+
+
+
+  <!--<button class="btn btn-default"><a href="/delete/?id={{id1}}">删除联系人</a></button>-->
+</form>
+
+</body>
+<script>
+function set_all(){
+  $("input").removeAttr("readonly");
+}
+</script>
+{%  endblock %}

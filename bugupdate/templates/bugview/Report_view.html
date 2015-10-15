@@ -1,0 +1,30 @@
+{% extends "Base/main.html" %}
+{% block content %}
+
+<style>
+.datecss{
+  font-weight: 800;
+}
+</style>
+<body>
+{% csrf_token %}
+<h1>{{getyear}}年-{{getmonth}}月份 BUG修复报表</h1>
+<table class="table table-bordered">
+  <tr>
+  {% for a in report %}
+    <td>
+      <span class="datecss">{{a.0}}:</span>
+      <br>
+      {% for x in a.1 %}
+        {{x.person.name}} <br>
+        &nbsp;&nbsp;ID:{{x.issue_id}} <br>
+      {% endfor %}
+    </td>
+  {% if forloop.counter == 4 or forloop.counter == 8 or forloop.counter == 12 or forloop.counter == 16 or forloop.counter == 20 or forloop.counter == 24 or forloop.counter == 28%}
+  </tr>
+  <tr>
+  {% endif %}
+  {% endfor %}
+</table>
+</body>
+{% endblock %}

@@ -1,0 +1,191 @@
+{% extends "HolidayBase/holiday_main.html" %}
+{% block public %}
+<style>
+  table span.glyphicon{
+    color: gray;
+  }
+  .positionword{
+    border-radius:5px;
+    background-color: #C1CDC1;
+    color: black;
+    font-size: 20px;
+    padding-bottom: 2px;
+  }
+  .employee_number{
+    border-radius:5px;
+    background-color: #CAE1FF;
+    padding: 1px 2px 1px 2px;
+  }
+  .more_thing div{
+    font-size: 15px;
+    color: gray;
+    margin-top: 2px;
+  }
+  .titlestyle{
+    background-color: #2E2E2E;
+    color: #CAE1FF;
+  }
+  .nav-up{
+    margin: 2px 0px 2px 0px;
+  }
+</style>
+
+
+{% csrf_token %}
+<!--共享界面-->
+
+        <table class="table table-bordered nav-up">
+          <tr>
+              <td>
+                需要您处理:
+                {% if perms.login.can_Coo %}
+                  <span class="badge">{{leavenote|length}}</span>
+                {% else %}
+                  <span class="badge">{{leavenote|length}}</span>
+                {% endif %}
+              </td>
+              <td>
+                已提交请假条：
+                <span class="badge">{{has_leave}}</span>
+              </td>
+              <td>
+                待批准：
+                <span class="badge">{{wait_leave}}</span>
+              </td>
+              <td>
+                已通过：
+                <span class="badge">{{success_leave}}</span>
+              </td>
+            </tr>
+          </table>
+      <p></p>
+      <table class="table table-condensed">
+              <tr>
+                      {% if perms.login.can_Coo %}
+                        <td class="titlestyle" colspan ="4" style="text-align:center">以下是没有提前申请的请假单，只需在【Coo签字】进行确认即可。</td>
+                      {% else %}
+                        <td class="titlestyle" colspan ="4" style="text-align:center">以下是所有需要您处理的请假单</td>
+                      {% endif %}
+              </tr>
+          {% for a in leavenote %}
+              <tr>
+                <td>
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-4">
+                          <span class="employee_number">员工号 {{a.employee_number}}</span>
+                      </div>
+                      <div class="col-md-5">
+                          提交日期:{{a.pub_date}}
+                      </div>
+                      <div class="col-md-3">
+                          复职日期:{{a.reinstatement_date}}
+                      </div>
+                    </div>
+                    <div class="more_thing">
+                      <div class="row">
+                        <div class="col-md-10">
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                          请假时间:{{a.start_date}} - {{a.end_date}}
+                        </div>
+                      </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                          申请人:{{a.person.name}}
+                      </div>
+                      <div class="col-md-3">
+                          经理签字:
+                          {% if a.manager_signature %}
+                          <span class="glyphicon glyphicon-ok"></span>
+                          {% else %}
+                          <span class="glyphicon glyphicon-remove"></span>
+                          {% endif %}
+                      </div>
+                      <div class="col-md-2">
+                          Coo签字:
+                            {% if a.coo_signature %}
+                              <span class="glyphicon glyphicon-ok"></span>
+                            {% else %}
+                              <span class="glyphicon glyphicon-remove"></span>
+                            {% endif %}
+                      </div>
+                      <div class="col-md-2">
+                          提前申请:
+                            {% if a.is_early == '1'%}
+                              <span class="glyphicon glyphicon-ok"></span>
+                            {% else %}
+                              <span class="glyphicon glyphicon-remove"></span>
+                            {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                </td>
+                <td class="deals">
+                    <a class="btn btn-info" href="/change_leave/?id={{a.id}}">处 理</a>
+                </td>
+              </tr>
+          {% endfor %}
+          <!--如果是Coo，把人事部需要处理的单子丢给Coo-->
+          {% if perms.login.can_Coo and leavenote_special_coo %}
+              <tr>
+                  <td class="titlestyle" colspan = " 4 " style="text-align:center">以下是属于人事部和各部门经理的请假单,需要您在【部门经理】与【COO】上同时签字批准</td>
+              </tr>
+                  {% for a in leavenote_special_coo %}
+                  <tr>
+                    <!--<span style="color:gray; float:right-down"># {{forloop.counter}} </span>-->
+                    <td>
+                      <div class="col-md-12">
+                        <div class="row">
+                          <div class="col-md-3">
+                              <span class="employee_number">员工号 {{a.employee_number}}</span>
+                          </div>
+                          <div class="col-md-5">
+                              提交日期:{{a.pub_date}}
+                          </div>
+                          <div class="col-md-4">
+                              复职日期:{{a.reinstatement_date}}
+                          </div>
+                        </div>
+                        <div class="more_thing">
+                          <div class="row">
+                            <div class="col-md-10">
+                              &nbsp;&nbsp;&nbsp;&nbsp;
+                              请假时间:{{a.start_date}} - {{a.end_date}}
+                            </div>
+                          </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                              &nbsp;&nbsp;&nbsp;&nbsp;
+                              申请人:{{a.person.name}}
+                          </div>
+                          <div class="col-md-3">
+                              经理签字:
+                              {% if a.manager_signature %}
+                              <span class="glyphicon glyphicon-ok"></span>
+                              {% else %}
+                              <span class="glyphicon glyphicon-remove"></span>
+                              {% endif %}
+                          </div>
+                          <div class="col-md-3">
+                              Coo签字:
+                              {% if a.coo_signature %}
+                              <span class="glyphicon glyphicon-ok"></span>
+                              {% else %}
+                              <span class="glyphicon glyphicon-remove"></span>
+                              {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                    </td>
+                    <td class="deals">
+                        <a class="btn btn-info" href="/change_leave/?id={{a.id}}">处 理</a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+              {% endif %}
+        </table>
+
+{% endblock %}
