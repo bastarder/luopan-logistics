@@ -78,15 +78,28 @@ WSGI_APPLICATION = 'newDjango.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-import sea.const
+from sae.const import (MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB)
+if 'SERVER_SOFTWARE' in os.environ:
+    from sae.const import (MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB)
+else:
+
+    MYSQL_HOST = 'w.rdc.sae.sina.com.cn'
+    MYSQL_PORT = '3307'
+    MYSQL_USER = 'ACCESSKEY'
+    MYSQL_PASS = 'SECRETKEY'
+    MYSQL_DB   = 'app_mysaesite'
+
+    from sae._restful_mysql import monkey
+    monkey.patch()
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'app_houqinguanli2',    #你的数据库名称
-        'USER': sea.const.SAE_MYSQL_USER,   #你的数据库用户名
-        'PASSWORD': sea.const.SAE_MYSQL_PASS, #你的数据库密码
-        'HOST': sea.const.SAE_MYSQL_HOST_M, #你的数据库主机，留空默认为localhost
-        'PORT': sea.const.SAE_MYSQL_PORT, #你的数据库端口
+        'ENGINE':   'django.db.backends.mysql',
+        'NAME':     MYSQL_DB,
+        'USER':     MYSQL_USER,
+        'PASSWORD': MYSQL_PASS,
+        'HOST':     MYSQL_HOST,
+        'PORT':     MYSQL_PORT,
     }
 }
 
