@@ -20,20 +20,21 @@ def public(request):
     leavenote=[]
     leavenote_renshi=[]
     leavenote_jingli=[]
-    print user.has_perm('login.can_bmjl')
-    print user.has_perm('login.can_rs')
-    print user.has_perm('login.can_Coo')
     if user.has_perm('login.can_bmjl'):
             leavenote= LeavePaper.objects.filter(department=person.department).exclude(person__name=person.name).filter(manager_signature="")
     if user.has_perm('login.can_rs'):
             leavenote= LeavePaper.objects.filter(vacation_type="")
     if user.has_perm('login.can_Coo'):
-            leavenotes= LeavePaper.objects.filter(coo_signature="")
-            leavenote=is_date_overload(leavenotes)
             #此参数：维护【谁】处理【人事部】的请假单
-            leavenote_renshi= LeavePaper.objects.filter(department="人事行政部").filter(Q(manager_signature="")|Q(coo_signature=""))
-            leavenote_jingli= LeavePaper.objects.filter(person__position='部门经理').filter(Q(manager_signature="")|Q(coo_signature=""))
-            leavenote_special_coo=chain(leavenote_renshi,leavenote_jingli)
+            leavenote_renshi = LeavePaper.objects.filter(department="人事行政部").filter(Q(manager_signature="")|Q(coo_signature=""))
+            leavenote_jingli = LeavePaper.objects.filter(person__position='部门经理').filter(Q(manager_signature="")|Q(coo_signature=""))
+            leavenote_special_coo = chain(leavenote_renshi,leavenote_jingli)
+            #未提前的请假单
+            leavenotes = LeavePaper.objects.exclude(department="人事行政部").exclude(person__position='部门经理').filter(coo_signature="")
+            for a in leavenotes:
+                if a.is_early() == '0':
+                    leavenote.append(a)
+                    print a
     #显示请假条不同状态数据
     #今天是否 已经 签到【bug修复】TodaySignature
     #Today=datetime.datetime.now().strftime("%Y-%m-%d");

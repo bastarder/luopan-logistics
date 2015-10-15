@@ -36,7 +36,7 @@ class BugDetail(models.Model):
     pub_date = models.DateTimeField('date published',default=timezone.now)
     def __unicode__(self):
             return self.person.name
-            
+
 class LeavePaper(models.Model):
     person = models.ForeignKey(Person)
     entry_time =  models.CharField(max_length=50,blank=True)
@@ -60,7 +60,7 @@ class LeavePaper(models.Model):
     employee_signature = models.CharField(max_length=50,blank=True)
     manager_signature = models.CharField(max_length=50,blank=True)
     coo_signature = models.CharField(max_length=50,blank=True)
-	#返回'1'代表不符合提前 '0'代表符合提前
+	#返回'1'代表生效 '0'代表没生效
     def is_right(self):
 		filltime = datetime.datetime.strptime(self.filling_date,"%Y-%m-%d").date()
 		starttime = datetime.datetime.strptime(self.start_date,"%Y-%m-%d").date()
@@ -89,5 +89,28 @@ class LeavePaper(models.Model):
 				return '1'
 			else:
 				return '0'
+
+    def is_early(self):
+    		filltime = datetime.datetime.strptime(self.filling_date,"%Y-%m-%d").date()
+    		starttime = datetime.datetime.strptime(self.start_date,"%Y-%m-%d").date()
+    		endtime = datetime.datetime.strptime(self.end_date,"%Y-%m-%d").date()
+    		day1 = (endtime-starttime).days
+    		diffDays= (starttime-filltime).days
+    		remainDay= diffDays % 7
+    		weeks = diffDays / 7
+    		weekends = 2 * weeks
+    		weekDay = int(filltime.weekday())+1
+    		if weekDay == 8:
+    			weekDay = 0
+    		i=0
+    		while(i<remainDay):
+    			if ((weekDay + i) ==6) or ((weekDay + i) ==0) or ((weekDay + i) ==7):
+    				weekends = weekends + 1
+    			i=i+1
+    		day2=diffDays-weekends
+    		if day1>day2:
+    			return '0'
+    		else:
+    			return '1'
     def __unicode__(self):
             return self.employee_number
