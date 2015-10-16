@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect #跳转
 from login.models import Person,Position,Department,LeavePaper
 from django.contrib.auth.models import User,Group
 from django.contrib.auth import authenticate,login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,permission_required
 from django.core.cache import cache
 from django.template import RequestContext
 from django.db.models import Q
@@ -127,11 +127,13 @@ def change_leave(request):
         return render_to_response('change_success.html',context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
+@permission_required('login.can_rs', login_url='/my_leave/')
 def all_leave(request):
     person = Person.objects.all()
     return render_to_response('all_leave.html',{'person':person},context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
+@permission_required('login.can_rs', login_url='/my_leave/')
 def all_leave_for_one(request):
     PersonID = request.GET['PersonID']
     person = Person.objects.get(id=PersonID)
@@ -141,9 +143,14 @@ def all_leave_for_one(request):
 
 @login_required(login_url='/login/')
 def all_leave_delete(request):
+    Falid = False
     LeaveID=request.GET['LeaveID']
     Leave = LeavePaper.objects.get(id=LeaveID)
     PersonID = Leave.person.id
+    if not request.user.has_perm('login.can_rs'):
+        if Leave.is_right() == '1':
+            Falid = True
+            return render_to_response('all_leave_delete.html',{'PersonID':PersonID,'Falid':Falid},context_instance=RequestContext(request))
     Leave.delete()
     return render_to_response('all_leave_delete.html',{'PersonID':PersonID},context_instance=RequestContext(request))
 

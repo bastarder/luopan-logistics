@@ -17,7 +17,7 @@
     {% for a in MyLeave %}
         <tr>
             <td>{{a.pub_date}}</td>
-            <td><a href="/change_leave/?id={{a.id}}">{{a.person.name}}</a></td>
+            <td><a href="/change_leave/?id={{a.id}}">{{a.id}} {{a.person.name}}</a></td>
             {% if a.manager_signature %}
             <td><span class="glyphicon glyphicon-ok"></span></td>
             {% else %}
@@ -30,7 +30,7 @@
             {% endif %}
             <td>
               {% if a.is_right == '0' %}
-                  <a class="btn btn-info" href="/delete_view/?id1={{a.id}}&id2=myleave">删除</a>
+                  <a class="btn btn-info" href="/all_leave_delete/?LeaveID={{a.id}}">删除</a>
               {% else %}
                   已生效,无法删除
               {% endif %}

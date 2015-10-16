@@ -1,6 +1,7 @@
 {% load staticfiles %}
 <html>
 <head>
+<title>罗盘后勤管理</title>
 <link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
 <script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
 <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -48,7 +49,7 @@
     margin-bottom: 1px;
     position: relative;
     left:31px;
-    width: 212px;
+    width: 202px;
   }
 
   .buttons{
@@ -86,7 +87,7 @@
 <body>
 {% csrf_token %}
   <div class="row">
-    <div class="col-md-2 nav" id='lefttab'>
+    <div class="col-xs-2 nav" id='lefttab'>
       <div class="row imglogo">
         <img src="{% static 'login/luopanlogo-o.png' %}" width="47" height="40">
         <span class="main-title">后 勤 管 理</span>
@@ -119,7 +120,7 @@
       </div>
 
     </div>
-    <div class="col-md-10 ss">
+    <div class="col-xs-10">
       <div class="row right-down" id="righttab" style="background-color:white;">
             {% block content %}{% endblock %}
       </div>
