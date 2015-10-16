@@ -51,10 +51,11 @@ def filter_version(request):
         return issues_more
     page=1
     x=0
+    outturn = False
     while(1):
         a="/api/v3/projects/" + project_id + "/issues?state=closed&order_by=updated_at&per_page=20&private_token="+private_token+"&page="+str(page)
         project_customer = get_json_to_dict(a)
-        if len(project_customer)<1:
+        if len(project_customer)<1 or outturn:
                 break
         for a in project_customer:
             issues_title = a['title']
@@ -73,7 +74,10 @@ def filter_version(request):
             issues_labels = []
             for la in labels:
                 issues_labels.append(la)
-            update_time=datetime.datetime.strptime(issues_create,"%Y-%m-%d").date()
+            update_time=datetime.datetime.strptime(issues_update,"%Y-%m-%d").date()
+            if update_time < start_time:
+                outturn = True
+                break
             if update_time >= start_time and update_time <= end_time:
                 if finish_name_str:
                     if finish_name == issues_fname:
