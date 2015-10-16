@@ -87,6 +87,7 @@
 <body>
 {% csrf_token %}
   <div class="row">
+    {% if user.is_authenticated %}
     <div class="col-xs-2 nav" id='lefttab'>
       <div class="row imglogo">
         <img src="{% static 'login/luopanlogo-o.png' %}" width="47" height="40">
@@ -118,8 +119,8 @@
             &nbsp;&nbsp;&nbsp;退出登陆
           </a>
       </div>
-
     </div>
+    {% endif %}
     <div class="col-xs-10">
       <div class="row right-down" id="righttab" style="background-color:white;">
             {% block content %}{% endblock %}

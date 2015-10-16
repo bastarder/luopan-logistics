@@ -28,7 +28,7 @@ def filter_version(request):
             finish_name_str = False
             f_name = '所有人'
     else:
-        return render_to_response('filter_version.html')
+        return render_to_response('filter_version.html',context_instance=RequestContext(request))
 
     start_time=datetime.datetime.strptime(start_time,"%Y-%m-%d").date()
     end_time=datetime.datetime.strptime(end_time,"%Y-%m-%d").date()
@@ -51,7 +51,6 @@ def filter_version(request):
         return issues_more
     page=1
     x=0
-    print "--------customer----------"
     while(1):
         a="/api/v3/projects/" + project_id + "/issues?state=closed&order_by=updated_at&per_page=20&private_token="+private_token+"&page="+str(page)
         project_customer = get_json_to_dict(a)
@@ -85,7 +84,7 @@ def filter_version(request):
     return render_to_response('filter_version.html',{'customer_bug':customer_bug,
                                                      'start_time':start_time,
                                                      'end_time':end_time,
-                                                     'f_name':f_name})
+                                                     'f_name':f_name},context_instance=RequestContext(request))
     #return render_to_response('filter_version.html',context_instance=RequestContext(request))
 
 def customer_view(request):
