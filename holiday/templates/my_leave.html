@@ -17,7 +17,7 @@
     {% for a in MyLeave %}
         <tr>
             <td>{{a.pub_date}}</td>
-            <td><a href="/change_leave/?id={{a.id}}">{{a.id}} {{a.person.name}}</a></td>
+            <td><a href="/change_leave/?id={{a.id}}">{{a.person.name}}</a></td>
             {% if a.manager_signature %}
             <td><span class="glyphicon glyphicon-ok"></span></td>
             {% else %}

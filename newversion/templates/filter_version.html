@@ -1,0 +1,99 @@
+{% extends "version.html" %}
+{% block version %}
+{% load staticfiles %}
+<style>
+.labels{
+  border-radius: 5px;
+  background-color: #CAE1FF;
+  padding: 1px 2px 1px 2px;
+}
+.search_VERSION{
+  position: relative;
+  left:-43px;
+  top:35px;
+}
+.more_thing_VERSION{
+  font-size: 15px;
+  color: gray;
+}
+</style>
+
+<body>
+{% csrf_token %}
+{% if not customer_bug %}
+<form class="form-horizontal search_VERSION" action='/filter_version/' method='GET'>
+
+           <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">  * 项目名称:</label>
+              <div class="col-sm-10">
+                <select name="project_id" class="btn btn-default dropdown-toggle form-control">
+                            <option value="1">客户系统</option>
+                            <option value="2">客服系统</option>
+                 </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+               <label for="inputEmail3" class="col-sm-2 control-label">* 起始日期: </label>
+               <div class="col-sm-10">
+                 <input type="text" name="start_time" class="form-control" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})">
+               </div>
+             </div>
+
+             <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">* 结束日期:</label>
+                <div class="col-sm-10">
+                  <input type="text" name="end_time" class="form-control" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})">
+                </div>
+              </div>
+
+              <div class="form-group">
+                 <label for="inputEmail3" class="col-sm-2 control-label">完成人:</label>
+                 <div class="col-sm-10">
+                   <input type="text" name="finish_name" class="form-control">
+                   <span style="color:red;">带 * 为必选参数</span>
+                 </div>
+               </div>
+
+  <div class="form-group">
+     <label for="inputEmail3" class="col-sm-2 control-label"> </label>
+     <div class="col-sm-10">
+         <button type="submit" class="btn btn-success btn-block btn-lg" >点击查询</button>
+     </div>
+   </div>
+</form>
+{% else %}
+<table class="table">
+  <tr>
+      <th>ID</th>  <!--iid-->
+      <th>
+        修复内容 - [ {{start_time}} - {{end_time}} : {{f_name}} ]
+      </th>
+  </tr>
+  {% for a in customer_bug %}
+  <tr>
+      <td>#{{a.2}}</td>
+      <td><!--&#10;换行符-->
+          <span
+          title="创建: {{a.3}}
+关闭: {{a.4}}
+创建人:{{a.5}}
+解决人:{{a.6}}">{{a.0}}</span>
+          {% for b in a.1 %}
+            <span class="labels">{{b}}</span>
+          {% endfor %}
+          <br>
+          <span class="more_thing_VERSION">
+            &nbsp;&nbsp;
+            解决人:{{a.5}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;解决时间: {{a.4}}
+
+          </span>
+      </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+</body>
+<script>
+</script>
+{% endblock %}

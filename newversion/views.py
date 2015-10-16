@@ -15,6 +15,79 @@ import calendar
 import xlwt
 import httplib, urllib,json
 
+def filter_version(request):
+    if request.GET:
+        start_time=request.GET['start_time']
+        end_time=request.GET['end_time']
+        project_id = request.GET['project_id']
+        if request.GET['finish_name']:
+            finish_name_str = True
+            finish_name = request.GET['finish_name']
+            f_name = finish_name
+        else:
+            finish_name_str = False
+            f_name = '所有人'
+    else:
+        return render_to_response('filter_version.html')
+
+    start_time=datetime.datetime.strptime(start_time,"%Y-%m-%d").date()
+    end_time=datetime.datetime.strptime(end_time,"%Y-%m-%d").date()
+    customer_bug=[]
+
+    params = urllib.urlencode({'login':'钱杰','email': '85257684@qq.com', 'password': '85257684'})
+    conn = httplib.HTTPConnection("180.97.80.177:8087")
+    conn.request("POST", "/api/v3/session", params)
+    response = conn.getresponse().read()
+    user_more = json.loads(response)
+    private_token = user_more['private_token']
+    print private_token
+    conn.close()
+    def get_json_to_dict(a):
+        conn = httplib.HTTPConnection("180.97.80.177:8087")
+        conn.request("GET", a)
+        response = conn.getresponse().read()
+        issues_more = json.loads(response)
+        conn.close()
+        return issues_more
+    page=1
+    x=0
+    print "--------customer----------"
+    while(1):
+        a="/api/v3/projects/" + project_id + "/issues?state=closed&order_by=updated_at&per_page=20&private_token="+private_token+"&page="+str(page)
+        project_customer = get_json_to_dict(a)
+        if len(project_customer)<1:
+                break
+        for a in project_customer:
+            issues_title = a['title']
+            issues_create = a['created_at'][0:10]
+            issues_update = a['updated_at'][0:10]
+            issues_iid = a['iid']
+            if a['assignee']:
+                issues_cname = a['assignee']['name']
+            else:
+                issues_cname = 'none'
+            if a['author']:
+                issues_fname = a['author']['name']
+            else:
+                issues_fname = 'none'
+            labels = a['labels']
+            issues_labels = []
+            for la in labels:
+                issues_labels.append(la)
+            update_time=datetime.datetime.strptime(issues_create,"%Y-%m-%d").date()
+            if update_time >= start_time and update_time <= end_time:
+                if finish_name_str:
+                    if finish_name == issues_fname:
+                        customer_bug.append([issues_title,issues_labels,issues_iid,issues_create,issues_update,issues_cname,issues_fname])
+                else:
+                    customer_bug.append([issues_title,issues_labels,issues_iid,issues_create,issues_update,issues_cname,issues_fname])
+        page=page+1
+    return render_to_response('filter_version.html',{'customer_bug':customer_bug,
+                                                     'start_time':start_time,
+                                                     'end_time':end_time,
+                                                     'f_name':f_name})
+    #return render_to_response('filter_version.html',context_instance=RequestContext(request))
+
 def customer_view(request):
     if not request.GET:
         c_page='1'

@@ -41,4 +41,5 @@ urlpatterns = [
     url(r'^bugview/Report_view/$', bugupdate_view.Report_view),
     #APP[updateverson]
     url(r'^customer_view/$',newversion_view.customer_view),
+    url(r'^filter_version/$',newversion_view.filter_version),
 ]
