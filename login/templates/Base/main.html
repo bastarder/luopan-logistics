@@ -82,6 +82,11 @@
     left:44px;
     font-size: 20px;
   }
+  #signout{
+    position: fixed;
+    left:1px;
+    top:93%;
+  }
 </style>
 </head>
 <body>
@@ -131,12 +136,17 @@
 </body>
 <script>
 $(document).ready(
+setInterval(
 function () {
     if ($("#lefttab").height() < $("#righttab").height())
     {
       $("#lefttab").height($("#righttab").height()+10)
     }
-})
+    /*bodyheight = document.body.clientHeight - 42
+    $("#signout").css({"top":bodyheight});*/
+},50)
+)
+
 
 </script>
 </html>

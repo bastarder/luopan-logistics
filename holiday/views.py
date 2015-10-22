@@ -83,8 +83,8 @@ def post_leave(request):
                          left_times = items['left_times'],
                          effective_date = items['effective_date'],
                          employee_signature = items['employee_signature'],
-                         manager_signature = items['manager_signature'],
-                         coo_signature = items['coo_signature'])
+                         manager_signature = "",
+                         coo_signature = "")
         ADD.save()
         return render_to_response('post_success.html',context_instance=RequestContext(request))
 
@@ -103,26 +103,32 @@ def change_leave(request):
         LeaveID = request.POST['change_id']
         items = request.POST
         detail = LeavePaper.objects.get(id=LeaveID)
-        detail.entry_time = items['entry_time']
-        detail.employee_number = items['employee_number']
-        detail.position = items['position']
-        detail.department = items['department']
-        detail.filling_date = items['filling_date']
-        detail.start_date = items['start_date']
-        detail.end_date = items['end_date']
-        detail.reinstatement_date = items['reinstatement_date']
-        detail.total_pay = items['total_pay']
-        detail.remarks = items['remarks']
-        detail.vacation_type_employee = items['vacation_type_employee']
-        detail.vacation_type = items['vacation_type']
-        detail.should_enjoy = items['should_enjoy']
-        detail.extracted = items['extracted']
-        detail.this_times = items['this_times']
-        detail.left_times = items['left_times']
-        detail.effective_date = items['effective_date']
-        detail.employee_signature = items['employee_signature']
-        detail.manager_signature = items['manager_signature']
-        detail.coo_signature = items['coo_signature']
+        if request.user.has_perm('login.can_rs'):
+            detail.entry_time = items['entry_time']
+            detail.employee_number = items['employee_number']
+            detail.position = items['position']
+            detail.department = items['department']
+            detail.filling_date = items['filling_date']
+            detail.start_date = items['start_date']
+            detail.end_date = items['end_date']
+            detail.reinstatement_date = items['reinstatement_date']
+            detail.total_pay = items['total_pay']
+            detail.remarks = items['remarks']
+            detail.vacation_type_employee = items['vacation_type_employee']
+            detail.vacation_type = items['vacation_type']
+            detail.should_enjoy = items['should_enjoy']
+            detail.extracted = items['extracted']
+            detail.this_times = items['this_times']
+            detail.left_times = items['left_times']
+            detail.effective_date = items['effective_date']
+            detail.employee_signature = items['employee_signature']
+            detail.manager_signature = items['manager_signature']
+            detail.coo_signature = items['coo_signature']
+        if request.user.has_perm('login.can_Coo'):
+            detail.manager_signature = items['manager_signature']
+            detail.coo_signature = items['coo_signature']
+        if request.user.has_perm('login.can_bmjl'):
+            detail.manager_signature = items['manager_signature']
         detail.save()
         return render_to_response('change_success.html',context_instance=RequestContext(request))
 
