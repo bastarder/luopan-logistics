@@ -11,6 +11,7 @@ import time
 import datetime
 import calendar
 import xlwt
+import StringIO
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
@@ -133,17 +134,11 @@ def Report_view(request):
                     sheet.write(int(sort)+int(i)+1, 2, x.issue_id)
             sort=int(len(b))+sort+1
              # row, column, value
-        workbook.save("monthReport.xls")
+        #workbook.save("monthReport.xls")
+        sio=StringIO.StringIO()
+        workbook.save(sio)
         the_file_name = "monthReport.xls"
-        def file_iterator(file_name, chunk_size=512):
-            with open(file_name) as f:
-                while True:
-                    c = f.read(chunk_size)
-                    if c:
-                        yield c
-                    else:
-                        break
-        response = StreamingHttpResponse(file_iterator(the_file_name))
+        response = StreamingHttpResponse(sio.getvalue())
         response['Content-Type'] = 'application/octet-stream'
         response['Content-Disposition'] = 'attachment;filename="{0}"'.format(the_file_name)
         return response

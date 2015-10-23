@@ -6,7 +6,7 @@
     margin: 0px;
     padding: 0px;
   }
-  .test1{
+  .formMonth{
     display: inline-block;
   }
   .noneth{
@@ -39,10 +39,10 @@
 <!--选择显示月份-->
 <p></p>
 {% if perms.login.can_js %}
-<form class="form-horizontal test" action='' method='GET'>
+<form class="form-horizontal" action='' method='GET'>
   <div class="form-group">
-    <label for="yearmonth" class="col-sm-1 choicemonth control-label">选择月份:</label>
-    <div class="col-sm-2 ">
+    <label for="yearmonth" class="col-sm-2 choicemonth control-label">选择月份:</label>
+    <div class="col-sm-3 ">
     <input name="yearmonth"
                     class="yearmonth  form-control"
                     onClick="WdatePicker({skin:'default',dateFmt:'yyyy-MM'})"
@@ -55,13 +55,12 @@
   <label class="btn btn-default"
           onclick="showadd()">我要签到</label>
 </form>
-<form class="form-horizontal test1" action='/bugview/Report_view' method='GET'>
+<form class="form-horizontal formMonth" action='/bugview/Report_view' method='GET'>
     <input type="hidden" name="getyear"  value="{{choice_year}}"/>
     <input type="hidden" name="getmonth"  value="{{choice_month}}"/>
     <input type="hidden" class="checkoutput"name="OutExcel" value="0"/>
     <input type="checkbox" class="checkoutput"name="OutExcel" value="1" />导出列表
     <input type="submit" class="btn btn-default" value="月报表视图" align="center" class = "form"/>
-    <small>比需先搜索出指定的月份才能打印，否则默认为当前所在月份</small>
 </form>
 
 <form class="form-horizontal showadd" action='/bugview/close_view/' method='POST'>
