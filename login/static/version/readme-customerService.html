@@ -1,0 +1,123 @@
+<!doctype html>
+<html class="no-js">
+ <head>
+    <meta charset="utf-8">
+    <title>更新内容</title>
+    <meta name="description" content="">
+    <!-- <meta name="viewport" content="width=device-width"> -->
+    <!-- Bootstrap 不支持 IE 古老的兼容模式。为了让 IE 浏览器运行最新的渲染模式下 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 将下面的 <meta> 标签加入到页面中，可以让部分国产浏览器默认采用高速模式渲染页面 -->
+    <meta name="renderer" content="webkit">
+
+    <script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
+    <link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="http://cdn.bootcss.com/angular.js/1.4.4/angular.js"></script>
+
+    <style>
+        #foot{text-align: center;}
+        .Decoration{background-color: #2894FF;}
+        .divtest{font-size: 15px;}
+        /*-----BUG详情背景框样式-----*/
+        .divtest1{
+                      background-color:#FFF0F5;
+                      border-radius: 3px;
+                      border: 1px solid #FFC0CB;
+                      padding: 10px 0px 10px 0px;}
+        .divtest2{line-height: 25px;}
+        /*-----数量序号位置初始化-----*/
+        .index{width: 45px;
+                text-align: center;
+                display: inline-block;}
+        /*-----标签块样式定义-----*/
+        .HighLight{text-align: center;
+                display: inline-block;
+                          font-size: 12px;
+                          line-height: 15px;
+                          width: 65px;
+                          color: white;
+                          border-radius: 3px;
+                          background-color:  #2894FF;
+                          padding: 3px 0px 2px 0px;
+                          opacity: 0.8;}
+        /*-----标签块颜色初始化-----*/
+    /*    .财务管理{background-color:  red;}
+        .出票{background-color:  #FF1493;}
+        .企业{background-color: blue;}
+        .退改签{background-color:  black;}
+        .组件{background-color:  #FF6EB4;}
+        .火车票{background-color:  #BDB76B;}
+        .酒店{background-color:  #A6A6A6;}*/
+    </style>
+ </head>
+
+<body ng-app="VersionApp" ng-controller="VersionController">
+    <div class="row">
+        <div class="col-md-2"> </div>
+        <div class="col-md-8">
+            <h2>客服系统更新内容:</h2>
+            <hr>
+            <div class="divtest" ng-repeat="version in Version">
+             <!--##########<span>蓝色色块装饰################版本号显示##########-->
+                <h3><span class="Decoration">&nbsp;</span>&nbsp;&nbsp;&nbsp;版本: {{version.Version}}</h3>
+                        <div class="divtest1" >
+                                <div class="divtest2" ng-repeat="date in version.Update">
+                                        <!--索引序号-->
+                                        <span class="index">{{$index+1}}.</span>
+                                        <!--[xxxx] 类别标签-->
+                                        <span class="HighLight {{date|HighLight}}">{{date|HighLight}}</span>
+                                        <!--详细BUG描述-->
+                                        <span>&nbsp;&nbsp;{{date|Important}}</span>
+                                </div>
+                        </div>
+            <hr>
+            </div>
+       </div>
+       <div class="col-md-2"></div>
+</div>
+
+<div id="foot" class="footer container">
+    <h5>Copyright© 2015, www.luopan88.com. All rights reserved. | ICP证：苏-15002876 | 版本号: {{Version[0].Version}}</h5>
+</div>
+
+</body>
+
+<script>
+var app=angular.module('VersionApp',[])
+app.controller('VersionController',function($scope,$http){
+         $http.get('version-customerService.json').success(function(data) {
+                  $scope.Version=data;
+         });
+    });
+/*截取标签部分*/
+app.filter('HighLight',function(){
+           return function(input){
+                          var i=0;
+                          var a;
+                          for(i=0;i<input.length;i++)
+                          {
+                            if(input[i]=="]")
+                      {
+                        a=input.slice(1,i);
+                        return a;
+                      }
+                          }
+                          }});
+/*截取更新内容部分*/
+app.filter('Important',function(){
+           return function(input){
+                          var i=0;
+                          var a;
+                          for(i=0;i<input.length;i++)
+                          {
+                            if(input[i]=="]")
+                      {
+                        a=input.slice(i+1);
+                        return a;
+                      }
+                          }
+                          }});
+</script>
+
+</html>
