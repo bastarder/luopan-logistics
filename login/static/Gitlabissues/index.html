@@ -1,0 +1,77 @@
+<html>
+ <head>
+    <meta charset="utf-8">
+    <title>Gitlab月报表导出</title>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js"></script>
+    <script src="bower_components/angular-multi-select/isteven-multi-select.js"></script>
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
+
+
+    <link href="bower_components/angular-multi-select/isteven-multi-select.css" rel="stylesheet" />
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+
+    <script src="app.js"></script>
+    <script src="Config.js"></script>
+    <script src="Controller/GitLabController.js"></script>
+    <script src="Service/TokenService.js"></script>
+    <script src="Service/MileStoneService.js"></script>
+    <script src="Service/issueSearchService.js"></script>
+    <script src="Service/issueDataDealService.js"></script>
+
+ </head>
+
+ <body ng-app="GitLabApp" ng-controller="GitLabController as vm">
+   <div class="row">
+     <div class="col-xs-1"></div>
+     <div class="col-xs-8">
+       <div ng-repeat="mile in vm.mileStone" class="form-group" >
+          <label>工程：{{mile[0].project_id|projectName}}</label>
+         <div
+           isteven-multi-select
+           input-model="mile"
+           output-model="vm.selectMile[mile[0].project_id]"
+           button-label="id title"
+           item-label="id title"
+           tick-property="ticked"
+           output-properties="id"
+           translation="vm.localLang"
+           max-labels="100"
+           max-height="250px">
+         </div>
+      </div>
+      <span class="btn btn-info" ng-click="vm.tok();">生成报表</span>
+    </div>
+
+  </div>
+   <hr>
+   <div class="row">
+     <div class="col-xs-1"></div>
+     <div class="col-xs-8">
+       <div ng-repeat='(key,value) in vm.data' style="border:3px solid #eee;padding:10px;margin:10px">
+         <legend><strong>{{key}}</strong></legend>
+         <table class="table table-bordered">
+           <tr>
+             <td>组</td>
+             <td>feature</td>
+             <td>bug</td>
+             <td>issues(总计)</td>
+             <td>备注</td>
+           <tr>
+           <tr ng-repeat="(key,value) in value">
+             <td>{{value.name}}</td>
+             <td>{{value.featureTotal}}</td>
+             <td>{{value.bugTotal}}</td>
+             <td>{{value.issuesTotal}}</td>
+             <td></td>
+           </tr>
+         </table>
+       </div>
+     </div>
+   </div>
+ </body>
+
+</html>
