@@ -1,0 +1,32 @@
+*{
+  padding: 0px;
+  margin: 0px;
+}
+.mileStone{
+  margin: 5px 0px 0px 12px;
+  padding: 15px 15px 15px 25px;
+  border-radius: 3px;
+  border: 2px solid #eee;
+  box-shadow: 5px 5px 5px;
+  position: fixed;
+}
+.search{
+  min-width: 300px;
+}
+[isteven-multi-select] .multiSelect button[ng-bind-html]{
+  min-width: 300px;
+}
+
+[isteven-multi-select] .multiSelect button[ng-bind-html].helperButton{
+  min-width: 30px;
+}
+
+.tipps{
+  padding-left: 20px;
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  border: 3px solid #eee ;
+  color: red;
+  border-radius: 3px;
+}

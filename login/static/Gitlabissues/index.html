@@ -12,6 +12,7 @@
 
     <link href="bower_components/angular-multi-select/isteven-multi-select.css" rel="stylesheet" />
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="CSS/main.css" rel="stylesheet" />
 
 
     <script src="app.js"></script>
@@ -26,52 +27,76 @@
 
  <body ng-app="GitLabApp" ng-controller="GitLabController as vm">
    <div class="row">
-     <div class="col-xs-1"></div>
-     <div class="col-xs-8">
-       <div ng-repeat="mile in vm.mileStone" class="form-group" >
-          <label>工程：{{mile[0].project_id|projectName}}</label>
-         <div
-           isteven-multi-select
-           input-model="mile"
-           output-model="vm.selectMile[mile[0].project_id]"
-           button-label="id title"
-           item-label="id title"
-           tick-property="ticked"
-           output-properties="id"
-           translation="vm.localLang"
-           max-labels="100"
-           max-height="250px">
-         </div>
-      </div>
-      <span class="btn btn-info" ng-click="vm.tok();">生成报表</span>
-    </div>
-
-  </div>
-   <hr>
-   <div class="row">
-     <div class="col-xs-1"></div>
-     <div class="col-xs-8">
-       <div ng-repeat='(key,value) in vm.data' style="border:3px solid #eee;padding:10px;margin:10px">
-         <legend><strong>{{key}}</strong></legend>
-         <table class="table table-bordered">
-           <tr>
-             <td>组</td>
-             <td>feature</td>
-             <td>bug</td>
-             <td>issues(总计)</td>
-             <td>备注</td>
-           <tr>
-           <tr ng-repeat="(key,value) in value">
-             <td>{{value.name}}</td>
-             <td>{{value.featureTotal}}</td>
-             <td>{{value.bugTotal}}</td>
-             <td>{{value.issuesTotal}}</td>
-             <td></td>
-           </tr>
-         </table>
+     <div class="col-xs-3">
+       <div ng-if="!vm.mileStone" class="tipps">
+          &nbsp;&nbsp;正在获取MileStone!请耐心等待!<br>
+          &nbsp;&nbsp;理论上只需1-3秒,等待过长请刷新页面!<br>
        </div>
-     </div>
-   </div>
+       <div class="mileStone">
+         <div ng-repeat="mile in vm.mileStone" class="form-group" >
+            <label>工程：{{mile[0].project_id|projectName}}</label>
+           <div
+             isteven-multi-select
+             input-model="mile"
+             output-model="vm.selectMile[mile[0].project_id]"
+             button-label="title"
+             item-label="title"
+             tick-property="ticked"
+             output-properties="id"
+             translation="vm.localLang"
+             max-labels="1"
+             max-height="250px">
+           </div>
+       </div>
+       <span class="btn btn-info search" id="search" ng-click="vm.tok();">生成报表</span>
+       <div class="tipps">
+           <ul>
+             <li>该统计只做数据记录和汇总</li>
+             <li>解决issues数量不能简单的等同于工作量</li>
+             <li>-------统计项目-------</li>
+               <ul>
+                 <li>   WebFront / customer-service</li>
+                 <li>   WebFront / customer</li>
+                 <li>   jiketravel_server / server</li>
+               </ul>
+              <li>--------------------------</li>
+          </ul>
+
+       </div>
+      </div>
+    </div>
+    <div class="col-xs-8">
+      <div ng-if="!vm.data" class="tipps">
+         1.点击生成报表后将在此处生成报表；<br>
+         2.如果点击后没有反应请见下以下几点：<br>
+        &nbsp;&nbsp;    > 是否正确选择版本号<br>
+        &nbsp;&nbsp;    > 请不要连续疯狂点击<br>
+        &nbsp;&nbsp;    > 数据处理需要时间,请等待几秒<br>
+        &nbsp;&nbsp;    > 你确定你有网？<br>
+        &nbsp;&nbsp;    > 算了,你还是来找我吧！<br>
+      </div>
+      <div ng-repeat='(key,value) in vm.data' style="border:3px solid #eee;padding:10px;margin:10px">
+        <legend><strong>{{key}}</strong></legend>
+        <table class="table table-bordered">
+          <tr>
+            <td>组</td>
+            <td>feature</td>
+            <td>bug</td>
+            <td>issues(总计)</td>
+            <td>备注</td>
+          <tr>
+          <tr ng-repeat="(key,value) in value">
+            <td>{{value.name}}</td>
+            <td>{{value.featureTotal}}</td>
+            <td>{{value.bugTotal}}</td>
+            <td>{{value.issuesTotal}}</td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
  </body>
 
 </html>

@@ -12,10 +12,11 @@
 
     function GitLabController($scope,MileStoneService,issueSearchService,issueDataDealService) {
       var vm = this;
-      vm.data = [];
+      vm.data = null;
       vm.tok = tok;
 
       function tok() {
+        document.getElementById('search').innerHTML="报表生成中...";
         issueSearchService.GetIssues(vm.selectMile)
           .then(function(data){
             console.log("controller:",data);
@@ -47,7 +48,9 @@
 
       }
 
-
+      $scope.$watch('vm.data',function(n,o){
+        document.getElementById('search').innerHTML="生成报表";
+      })
     };//controller End
 
 })();
