@@ -42,10 +42,11 @@
               var parm = {
                 private_token:token
               };
-
+              console.log('开始获取所有版本号...');
               $http.get(config.url+'projects/'+id+'/milestones',{params:parm})
                 .success(SuccessGetMileStone)
                 function SuccessGetMileStone(data){
+                  console.log('版本号获取成功,开始处理筛选不需要的版本号...');
                   var resultId = data[0].project_id ;
                   result.push(angular.copy(data));
                   if(result.length == project.length){
@@ -56,7 +57,7 @@
                         };
                       };
                     };
-                    console.log(result)
+                    console.log('版本号处理完毕...');
                     deferred.resolve(result);
                   };
                 };

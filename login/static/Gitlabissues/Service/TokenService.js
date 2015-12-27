@@ -21,10 +21,12 @@
           var token = localStorageService.get('pravite_token');
           //查询缓存token;如果有择不请求登陆；
           if(token){
+            console.log('缓存token获取成功!进行下一步操作...');
             deferred.resolve(token);
             return deferred.promise;
           }
           //请求登陆,获取pravite_token值;
+          console.log('登陆链接Gitlab,获取token中...');
           $http.post(config.url+'session',config.LoginParm)
             .then(tokenResolve)
           //回调处理;
@@ -33,6 +35,7 @@
             //登陆成功，返回身份码；
             if(response.data.private_token){
               localStorageService.set('pravite_token',response.data.private_token);
+              console.log('最新token获取成功!进行下一步操作...');
               deferred.resolve(response.data.private_token);
             }
           }

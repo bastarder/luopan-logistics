@@ -25,10 +25,6 @@
           alert('没有获取到token！请刷新页面！');
           return ;
         };
-        if(!mileStone){
-          alert('没有选择版本号！怎么导出！');
-          return ;
-        }
         var parm = {
           private_token:token
         };
@@ -45,6 +41,7 @@
 
               //project_id 工程号 milestoneid 版本号； 开始重复请求
               var times = times + 1;
+              console.log('请求[id:'+milestoneId+']版本Issues中...');
               $http.get(config.url+'projects/'+project_id+'/milestones/'+milestoneId+'/issues',{params:parm})
                 .success(SuccessGitI);
               function SuccessGitI(data){
@@ -60,9 +57,8 @@
                     result[innerId] = _(result[innerId]).concat(issues).value();
                     // result[innerId].push(issues);
                   };
-                  console.log('请求中...');
                   if(successTimes == times){
-                    console.log('数据请求完全结束');
+                    console.log('issues数据请求完全结束...');
                     deferred.resolve(result);
                   };
                 };

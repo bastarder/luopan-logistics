@@ -15,6 +15,7 @@
       this.Deal = issueDeal;
 
       function issueDeal(issues){
+        console.log('开始处理issues数据...');
         var results = {};
         var issues = angular.copy(issues);
         //issues为 1 2 8 项目 所有符合milestone的issues
@@ -60,6 +61,7 @@
         }
         //客户系统数据处理
         if(issues[1]){
+          console.log('处理[客户系统]数据中...');
           var record = angular.copy(issues[1]);
           var record = _.groupBy(record,'state');
           var opened = record['opened'];
@@ -71,6 +73,7 @@
 
         //客服系统数据处理
         if(issues[2]){
+          console.log('处理[客服系统]数据中...');
           var record = angular.copy(issues[2]);
           var record = _.groupBy(record,'state');
           var opened = record['opened'];
@@ -104,6 +107,7 @@
 
         //后台系统数据处理
         if(issues[8]){
+          console.log('处理[后台系统]数据中...')
           var record = angular.copy(issues[8]);
           var record = _.groupBy(record,'state');
           var opened = record['opened'];
@@ -116,6 +120,7 @@
 
         //个人汇总数据处理
         if(issues){
+          console.log('开始汇总个人数据...')
           var personName = [];
           var personal = {};
           for(var x in issues){
@@ -152,10 +157,10 @@
             };
           };
           results['个人统计'] = personal;
-          console.log('个人统计:',personal);
+          console.log('个人统计结果:',personal);
         };
+        console.log('Done! 数据全部处理结束--> 成功生成报表',results);
         return results;
-        console.log('数据处理结束：',results);
 
       };//issueDeal();
 
