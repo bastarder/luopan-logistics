@@ -12,34 +12,16 @@
 
     function GitLabController($scope,MileStoneService,issueSearchService,issueDataDealService) {
       var vm = this;
-      vm.data = null;
-      vm.tok = tok;
+      vm.data = null; //周报表数据统计最终结果；
+      vm.VersionIssues = null; //版本更新详情统计；
 
-      function tok() {
-        if(vm.selectMile[1].length==0&&vm.selectMile[2].length==0&&vm.selectMile[8].length==0){
-          alert('请选择版本号');
-          return ;
-        }
-        document.getElementById('search').innerHTML="报表生成中...";
-        issueSearchService.GetIssues(vm.selectMile)
-          .then(function(data){
-            vm.data = issueDataDealService.Deal(data);
-          })
-      }
-      //----正式代码------//
-      vm.localLang = {
-          selectAll       : "全选",
-          selectNone      : "全部取消",
-          reset           : "重置",
-          search          : "输入并搜索",
-          nothingSelected : "请选择版本号"
-      }
-      vm.GetMileStones = GetMileStones;
+      vm.GetMileStones = GetMileStones; //获得版本号
+      vm.searchNumber = searchNumber; //生成报表
+      vm.searchVersion = searchVersion;
       vm.selectMile = {};
       //数据初始化；
       GetMileStones();
 
-      //vm.GetMileStones
       function GetMileStones(argument) {
         MileStoneService.GetMileStones()
           .then(SuccessGetM);
@@ -50,10 +32,54 @@
         }
 
       }
-
+      function searchNumber() {
+        //清空旧数据
+        vm.data = null;
+        vm.VersionIssues = null;
+        if(vm.selectMile[1].length==0&&vm.selectMile[2].length==0&&vm.selectMile[8].length==0){
+          alert('请选择版本号');
+          return ;
+        }
+        document.getElementById('search').innerHTML="报表生成中...";
+        issueSearchService.GetIssues(vm.selectMile)
+          .then(function(data){
+            vm.data = issueDataDealService.Deal(data);
+          })
+      }
+      function searchVersion(){
+        for(var i in vm.selectMile){
+          if(vm.selectMile[i].length>1){
+            alert('生成BUG更新页面的时候只能每项工程选择一个版本号！');
+            return ;
+          }
+        };
+        if(vm.selectMile[1].length==0&&vm.selectMile[2].length==0&&vm.selectMile[8].length==0){
+          alert('请选择版本号');
+          return ;
+        }
+        //清空旧数据
+        vm.data = null;
+        vm.VersionIssues = null;
+        document.getElementById('searchIssues').innerHTML="页面生成中...";
+        issueSearchService.GetIssuesForMore(vm.selectMile)
+          .then(function(data){
+            vm.VersionIssues = angular.copy(data);
+          })
+      };
       $scope.$watch('vm.data',function(n,o){
         document.getElementById('search').innerHTML="生成报表";
       })
+      $scope.$watch('vm.VersionIssues',function(n,o){
+        document.getElementById('searchIssues').innerHTML="生成Bug更新页面";
+      })
+      //配置select文字；
+      vm.localLang = {
+          selectAll       : "全选",
+          selectNone      : "全部取消",
+          reset           : "重置",
+          search          : "输入并搜索",
+          nothingSelected : "请选择版本号"
+      }
     };//controller End
 
 })();

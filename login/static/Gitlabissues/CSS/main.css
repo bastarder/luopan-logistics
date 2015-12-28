@@ -11,6 +11,7 @@
 }
 .search{
   min-width: 280px;
+  margin-top: 5px;
 }
 [isteven-multi-select] .multiSelect button[ng-bind-html]{
   min-width: 280px;
@@ -28,4 +29,22 @@
   border: 3px solid #eee ;
   color: red;
   border-radius: 3px;
+}
+
+.issueLabel{
+  border-radius: 3px;
+  background: #eee;
+  padding: 2px;
+  margin-left: 3px;
+}
+.issueForMore{
+  min-width: 300px;
+  font-size: 18px;
+}
+.VersionIssues{
+  padding: 15px;
+  border-radius: 5px;
+  border: 2px solid #eee;
+  margin-top: 8px;
+  box-shadow: 2px 2px 2px 2px;;
 }

@@ -25,8 +25,8 @@
 
  </head>
 
- <body ng-app="GitLabApp" ng-controller="GitLabController as vm">
-   <div class="row">
+ <body ng-app="GitLabApp" >
+   <div class="row" ng-controller="GitLabController as vm">
      <div class="col-xs-3">
        <div ng-if="!vm.mileStone" class="tipps">
           &nbsp;&nbsp;正在获取MileStone!请耐心等待!<br>
@@ -48,7 +48,9 @@
              max-height="250px">
            </div>
        </div>
-       <span class="btn btn-info search" id="search" ng-click="vm.tok();">生成报表</span>
+       <!-- {{vm.selectMile}} -->
+       <span class="btn btn-info search" ng-show="vm.mileStone" id="search" ng-click="vm.searchNumber();">生成报表</span>
+       <span class="btn btn-success search" id="searchIssues" ng-click="vm.searchVersion();">生成Bug更新页</span>
        <div class="tipps">
            <ul>
              <li>该统计只做数据记录和汇总</li>
@@ -66,7 +68,8 @@
       </div>
     </div>
     <div class="col-xs-8">
-      <div ng-if="!vm.data" class="tipps">
+      <div ng-if="!vm.data&&!vm.VersionIssues" class="tipps">
+         ----生成报表介绍----<br>
          1.点击生成报表后将在此处生成报表；<br>
          2.如果点击后没有反应请见下以下几点：<br>
         &nbsp;&nbsp;    > 是否正确选择版本号<br>
@@ -75,9 +78,22 @@
         &nbsp;&nbsp;    > 你确定你有网？<br>
         &nbsp;&nbsp;    > 算了,你还是来找我吧！<br>
       </div>
-      <div ng-repeat='(key,value) in vm.data' style="border:3px solid #eee;padding:10px;margin:10px">
+      <div ng-if="!vm.data&&!vm.VersionIssues" class="tipps">
+        ----生成Bug更新页介绍----<br>
+         1.点击生成Bug更新页后将在此处生成内容；<br>
+         2.版本号很多都是预先写好的,可能其中还没包含issue,所以可能会出现空结果<br>
+         &nbsp;&nbsp;   > 所以请务必选择一些实际的版本号;<br>
+         3.如果点击后没有反应请见下以下几点：<br>
+        &nbsp;&nbsp;    > ! ! ! 生成BUG更新页面时,每个工程只能选择【1】个版本号才能进行生成<br>
+        &nbsp;&nbsp;    > 是否正确选择版本号<br>
+        &nbsp;&nbsp;    > 请不要连续疯狂点击<br>
+        &nbsp;&nbsp;    > 数据处理需要时间,请等待几秒<br>
+        &nbsp;&nbsp;    > 你确定你有网？<br>
+        &nbsp;&nbsp;    > 算了,你还是来找我吧！<br>
+      </div>
+      <div ng-show="vm.data" ng-repeat='(key,value) in vm.data' style="border:3px solid #eee;padding:10px;margin:10px">
         <legend><strong>{{key}}</strong></legend>
-        <table class="table table-bordered">
+        <table class="table table-border">
           <tr>
             <td>组</td>
             <td>feature</td>
@@ -94,6 +110,43 @@
           </tr>
         </table>
       </div>
+
+      <div ng-if="vm.VersionIssues" ng-repeat="project in vm.VersionIssues" class="VersionIssues">
+        <legend>
+          <strong>
+            {{project.name}} [版本号:{{project.closedIssues[0].milestone.title}}]
+          </strong>
+        </legend>
+        <div class="tipps" ng-show="!project.closedIssues">
+          显示空的？<br>
+          1.该版本号内,还没有issue被创建；<br>
+          2.您选择的版本号可能超前当前日期很久,只是预先创建好的版本号；<br>
+          所以请根据实际的情况,根据一个真实的版本号去生成页面；<br>
+        </div>
+        <table class="table table-border">
+          <tr ng-repeat="issue in project.closedIssues">
+            <td>{{$index+1}}</td>
+            <td>{{issue.title}}
+              <span ng-repeat="label in issue.labels" class="issueLabel">
+                {{label}}
+              </span>
+            </td>
+            <td class="btn-group">
+              <button type="button" class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                查看更多信息 <span class="caret"></span>
+              </button>
+              <div class="dropdown-menu" class="issueForMore">
+                <strong>创建人：</strong>{{issue.author.name}}<br>
+                <strong>指派人：</strong>{{issue.assignee.name}}<br>
+                <strong>创建时间：</strong>{{issue.created_at}}<br>
+                <strong>完成时间：</strong>{{issue.updated_at}}<br>
+                <strong>对应编号：</strong>issue#{{issue.iid}}<br>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
     </div>
   </div>
 
