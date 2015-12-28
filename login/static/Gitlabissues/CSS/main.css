@@ -8,6 +8,8 @@
   border-radius: 3px;
   border: 2px solid #eee;
   box-shadow: 5px 5px 5px;
+  min-width: 330px;
+  max-width: 330px;
 }
 .search{
   min-width: 280px;
