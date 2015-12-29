@@ -50,3 +50,19 @@
   margin-top: 8px;
   box-shadow: 2px 2px 2px 2px;;
 }
+.loginForm{
+  margin-top: 150px;
+}
+.loginForm button{
+  width: 150px;
+}
+.loginForm small{
+  margin-left: 15px;
+  font-weight: 100;
+  color: gray;
+}
+.loginTitle{
+  margin-left: 45px;
+  font-size: 50px;
+  color: #204d74;
+}

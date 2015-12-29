@@ -44,11 +44,15 @@
               var times = times + 1;
               console.log('请求[id:'+milestoneId+']版本Issues中...');
               $http.get(config.url+'projects/'+project_id+'/milestones/'+milestoneId+'/issues',{params:parm})
-                .success(SuccessGitI);
+                .success(SuccessGitI)
+                .error(ErrorGitI)
+              function ErrorGitI(data){
+                successTimes = successTimes + 1;
+              }
               function SuccessGitI(data){
                 var issues = angular.copy(data)
-                if(issues[0].project_id){
-                  successTimes = successTimes + 1;
+                successTimes = successTimes + 1;
+                if(issues[0]&&issues[0].project_id){
                   var innerId = issues[0].project_id;
                   if(result[innerId]){
                     // result[innerId].push(issues);

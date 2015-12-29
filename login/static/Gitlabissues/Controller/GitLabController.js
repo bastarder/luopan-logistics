@@ -8,19 +8,57 @@
     .module('GitLabApp')
     .controller('GitLabController',GitLabController)
 
-    GitLabController.$inject = ['$scope','MileStoneService','issueSearchService','issueDataDealService'];
+    GitLabController.$inject = ['$scope','MileStoneService','TokenService','issueSearchService','issueDataDealService','localStorageService'];
 
-    function GitLabController($scope,MileStoneService,issueSearchService,issueDataDealService) {
+    function GitLabController($scope,MileStoneService,TokenService,issueSearchService,issueDataDealService,localStorageService) {
       var vm = this;
       vm.data = null; //周报表数据统计最终结果；
       vm.VersionIssues = null; //版本更新详情统计；
-
+      vm.remenberUsername = true;
       vm.GetMileStones = GetMileStones; //获得版本号
       vm.searchNumber = searchNumber; //生成报表
       vm.searchVersion = searchVersion;
       vm.selectMile = {};
+      vm.isLogin = false;
+      vm.onLogin = false;
       //数据初始化；
-      GetMileStones();
+      vm.email = localStorageService.get('email')||null;
+      vm.password = null;
+      var token = localStorageService.get('pravite_token');
+      if(token){
+        vm.isLogin = true;
+        GetMileStones();
+      };
+
+      vm.login = login;
+      vm.signOut = signOut;
+
+      function login(){
+        vm.onLogin = true;
+        TokenService.GetToken(vm.email,vm.password)
+        .then(function(data) {
+          vm.isLogin = true;
+          if(vm.remenberUsername){
+            localStorageService.set('email',vm.email);
+          }else{
+            localStorageService.remove('email');
+          }
+          GetMileStones();
+          vm.onLogin = false;
+        })
+        .catch(function(data) {
+          alert('登陆失败！');
+          vm.onLogin = false;
+          return ;
+        })
+      }
+
+      function signOut(){
+        localStorageService.remove('pravite_token');
+        vm.isLogin = false;
+        vm.email = localStorageService.get('email')||null;
+        vm.password = null;
+      }
 
       function GetMileStones(argument) {
         MileStoneService.GetMileStones()

@@ -25,128 +25,165 @@
 
  </head>
 
- <body ng-app="GitLabApp" >
-   <div class="row" ng-controller="GitLabController as vm">
-     <div class="col-lg-3">
-       <div ng-if="!vm.mileStone" class="tipps">
-          &nbsp;&nbsp;正在获取MileStone!请耐心等待!<br>
-          &nbsp;&nbsp;理论上只需1-3秒,等待过长请刷新页面!<br>
-       </div>
-       <div class="mileStone">
-         <div ng-repeat="mile in vm.mileStone" class="form-group" >
-            <label>工程：{{mile[0].project_id|projectName}}</label>
-           <div
-             isteven-multi-select
-             input-model="mile"
-             output-model="vm.selectMile[mile[0].project_id]"
-             button-label="title"
-             item-label="title"
-             tick-property="ticked"
-             output-properties="id"
-             translation="vm.localLang"
-             max-labels="1"
-             max-height="250px">
-           </div>
-       </div>
-       <!-- {{vm.selectMile}} -->
-       <span class="btn btn-info search" ng-show="vm.mileStone" id="search" ng-click="vm.searchNumber();">生成报表</span>
-       <span class="btn btn-success search" id="searchIssues" ng-click="vm.searchVersion();">生成Bug更新页</span>
-       <div class="tipps">
-           <ul>
-             <li>该统计只做数据记录和汇总</li>
-             <li>解决issues数量不能简单的等同于工作量</li>
-             <li>-------统计项目-------</li>
-               <ul>
-                 <li>   WebFront / customer-service</li>
-                 <li>   WebFront / customer</li>
-                 <li>   jiketravel_server / server</li>
-               </ul>
-              <li>--------------------------</li>
-          </ul>
+ <body ng-app="GitLabApp" ng-controller="GitLabController as vm" >
 
-       </div>
-      </div>
-    </div>
-    <div class="col-lg-8">
-      <div ng-if="!vm.data&&!vm.VersionIssues" class="tipps">
-         ----生成报表介绍----<br>
-         1.点击生成报表后将在此处生成报表；<br>
-         2.如果点击后没有反应请见下以下几点：<br>
-        &nbsp;&nbsp;    > 是否正确选择版本号<br>
-        &nbsp;&nbsp;    > 请不要连续疯狂点击<br>
-        &nbsp;&nbsp;    > 数据处理需要时间,请等待几秒<br>
-        &nbsp;&nbsp;    > 你确定你有网？<br>
-        &nbsp;&nbsp;    > 算了,你还是来找我吧！<br>
-      </div>
-      <div ng-if="!vm.data&&!vm.VersionIssues" class="tipps">
-        ----生成Bug更新页介绍----<br>
-         1.点击生成Bug更新页后将在此处生成内容；<br>
-         2.版本号很多都是预先写好的,可能其中还没包含issue,所以可能会出现空结果<br>
-         &nbsp;&nbsp;   > 所以请务必选择一些实际的版本号;<br>
-         3.如果点击后没有反应请见下以下几点：<br>
-        &nbsp;&nbsp;    > ! ! ! 生成BUG更新页面时,每个工程只能选择【1】个版本号才能进行生成<br>
-        &nbsp;&nbsp;    > 是否正确选择版本号<br>
-        &nbsp;&nbsp;    > 请不要连续疯狂点击<br>
-        &nbsp;&nbsp;    > 数据处理需要时间,请等待几秒<br>
-        &nbsp;&nbsp;    > 你确定你有网？<br>
-        &nbsp;&nbsp;    > 算了,你还是来找我吧！<br>
-      </div>
-      <div ng-show="vm.data" ng-repeat='(key,value) in vm.data' style="border:3px solid #eee;padding:10px;margin:10px">
-        <legend><strong>{{key}}</strong></legend>
-        <table class="table table-border">
-          <tr>
-            <td>组</td>
-            <td>feature</td>
-            <td>bug</td>
-            <td>issues(总计)</td>
-            <td>备注</td>
-          <tr>
-          <tr ng-repeat="(key,value) in value">
-            <td>{{value.name}}</td>
-            <td>{{value.featureTotal}}</td>
-            <td>{{value.bugTotal}}</td>
-            <td>{{value.issuesTotal}}</td>
-            <td></td>
-          </tr>
-        </table>
-      </div>
-
-      <div ng-if="vm.VersionIssues" ng-repeat="project in vm.VersionIssues" class="VersionIssues">
-        <legend>
-          <strong>
-            {{project.name}} [版本号:{{project.closedIssues[0].milestone.title}}]
-          </strong>
-        </legend>
-        <div class="tipps" ng-show="!project.closedIssues">
-          显示空的？<br>
-          1.该版本号内,还没有issue被创建；<br>
-          2.您选择的版本号可能超前当前日期很久,只是预先创建好的版本号；<br>
-          所以请根据实际的情况,根据一个真实的版本号去生成页面；<br>
+   <div class="row loginForm" ng-show='!vm.isLogin'>
+     <div class="col-lg-2"></div>
+     <form class="form-horizontal col-lg-6">
+      <legend>
+        <strong class="loginTitle">Git issues</strong>
+        <small>使用你得 Git Lab 账号登陆吧!</small>
+      </legend>
+      <div class="form-group">
+        <label for="inputEmail3" class="col-sm-2 control-label">账号</label>
+        <div class="col-sm-10">
+          <input ng-model="vm.email" type="text" class="form-control" id="inputEmail3" placeholder="用户名 或者 邮箱">
         </div>
-        <table class="table table-border">
-          <tr ng-repeat="issue in project.closedIssues">
-            <td>{{$index+1}}</td>
-            <td>{{issue.title}}
-              <span ng-repeat="label in issue.labels" class="issueLabel">
-                {{label}}
-              </span>
-            </td>
-            <td class="btn-group">
-              <button type="button" class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                查看更多信息 <span class="caret"></span>
-              </button>
-              <div class="dropdown-menu" class="issueForMore">
-                <strong>创建人：</strong>{{issue.author.name}}<br>
-                <strong>指派人：</strong>{{issue.assignee.name}}<br>
-                <strong>创建时间：</strong>{{issue.created_at}}<br>
-                <strong>完成时间：</strong>{{issue.updated_at}}<br>
-                <strong>对应编号：</strong>issue#{{issue.iid}}<br>
-              </div>
-            </td>
-          </tr>
-        </table>
       </div>
+      <div class="form-group">
+        <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
+        <div class="col-sm-10">
+          <input ng-model="vm.password" type="password" class="form-control" id="inputPassword3" placeholder="密码">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="vm.remenberUsername"> 记住账号
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default btn-lg" ng-click="vm.login()" ng-disabled="vm.onLogin">登陆</button>
+        </div>
+      </div>
+    </form>
+   </div>
 
+   <div ng-show='vm.isLogin' class="row">
+       <div class="col-lg-3">
+         <div ng-if="!vm.mileStone" class="tipps">
+            &nbsp;&nbsp;正在获取MileStone!请耐心等待!<br>
+            &nbsp;&nbsp;理论上只需1-3秒,等待过长请刷新页面!<br>
+         </div>
+         <div class="mileStone">
+           <div ng-repeat="mile in vm.mileStone" class="form-group" >
+              <label>工程：{{mile[0].project_id|projectName}}</label>
+             <div
+               isteven-multi-select
+               input-model="mile"
+               output-model="vm.selectMile[mile[0].project_id]"
+               button-label="title"
+               item-label="title"
+               tick-property="ticked"
+               output-properties="id"
+               translation="vm.localLang"
+               max-labels="1"
+               max-height="250px">
+             </div>
+         </div>
+         <!-- {{vm.selectMile}} -->
+         <span class="btn btn-info search" ng-show="vm.mileStone" id="search" ng-click="vm.searchNumber();">生成报表</span>
+         <span class="btn btn-success search" id="searchIssues" ng-click="vm.searchVersion();">生成Bug更新页</span>
+         <span class="btn btn-danger search"  ng-click="vm.signOut();">退出登陆</span>
+         <div class="tipps">
+             <ul>
+               <li>该统计只做数据记录和汇总</li>
+               <li>解决issues数量不能简单的等同于工作量</li>
+               <li>-------统计项目-------</li>
+                 <ul>
+                   <li>   WebFront / customer-service</li>
+                   <li>   WebFront / customer</li>
+                   <li>   jiketravel_server / server</li>
+                 </ul>
+                <li>--------------------------</li>
+            </ul>
+
+         </div>
+        </div>
+       </div>
+       <div class="col-lg-8">
+        <div ng-if="!vm.data&&!vm.VersionIssues" class="tipps">
+           ----生成报表介绍----<br>
+           1.点击生成报表后将在此处生成报表；<br>
+           2.如果点击后没有反应请见下以下几点：<br>
+          &nbsp;&nbsp;    > 是否正确选择版本号<br>
+          &nbsp;&nbsp;    > 请不要连续疯狂点击<br>
+          &nbsp;&nbsp;    > 数据处理需要时间,请等待几秒<br>
+          &nbsp;&nbsp;    > 你确定你有网？<br>
+          &nbsp;&nbsp;    > 算了,你还是来找我吧！<br>
+        </div>
+        <div ng-if="!vm.data&&!vm.VersionIssues" class="tipps">
+          ----生成Bug更新页介绍----<br>
+           1.点击生成Bug更新页后将在此处生成内容；<br>
+           2.版本号很多都是预先写好的,可能其中还没包含issue,所以可能会出现空结果<br>
+           &nbsp;&nbsp;   > 所以请务必选择一些实际的版本号;<br>
+           3.如果点击后没有反应请见下以下几点：<br>
+          &nbsp;&nbsp;    > ! ! ! 生成BUG更新页面时,每个工程只能选择【1】个版本号才能进行生成<br>
+          &nbsp;&nbsp;    > 是否正确选择版本号<br>
+          &nbsp;&nbsp;    > 请不要连续疯狂点击<br>
+          &nbsp;&nbsp;    > 数据处理需要时间,请等待几秒<br>
+          &nbsp;&nbsp;    > 你确定你有网？<br>
+          &nbsp;&nbsp;    > 算了,你还是来找我吧！<br>
+        </div>
+        <div ng-show="vm.data" ng-repeat='(key,value) in vm.data' style="border:3px solid #eee;padding:10px;margin:10px">
+          <legend><strong>{{key}}</strong></legend>
+          <table class="table table-border">
+            <tr>
+              <td>组</td>
+              <td>feature</td>
+              <td>bug</td>
+              <td>issues(总计)</td>
+              <td>备注</td>
+            <tr>
+            <tr ng-repeat="(key,value) in value">
+              <td>{{value.name}}</td>
+              <td>{{value.featureTotal}}</td>
+              <td>{{value.bugTotal}}</td>
+              <td>{{value.issuesTotal}}</td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+
+        <div ng-if="vm.VersionIssues" ng-repeat="project in vm.VersionIssues" class="VersionIssues">
+          <legend>
+            <strong>
+              {{project.name}} [版本号:{{project.closedIssues[0].milestone.title}}]
+            </strong>
+          </legend>
+          <div class="tipps" ng-show="!project.closedIssues">
+            显示空的？<br>
+            1.该版本号内,还没有issue被创建；<br>
+            2.您选择的版本号可能超前当前日期很久,只是预先创建好的版本号；<br>
+            所以请根据实际的情况,根据一个真实的版本号去生成页面；<br>
+          </div>
+          <table class="table table-border">
+            <tr ng-repeat="issue in project.closedIssues">
+              <td>{{$index+1}}</td>
+              <td>{{issue.title}}
+                <span ng-repeat="label in issue.labels" class="issueLabel">
+                  {{label}}
+                </span>
+              </td>
+              <td class="btn-group">
+                <button type="button" class="btn btn-default btn-small dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  查看更多信息 <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu" class="issueForMore">
+                  <strong>创建人：</strong>{{issue.author.name}}<br>
+                  <strong>指派人：</strong>{{issue.assignee.name}}<br>
+                  <strong>创建时间：</strong>{{issue.created_at}}<br>
+                  <strong>完成时间：</strong>{{issue.updated_at}}<br>
+                  <strong>对应编号：</strong>issue#{{issue.iid}}<br>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
     </div>
   </div>
 
