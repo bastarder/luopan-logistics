@@ -147,12 +147,14 @@
                 };
                 personal[id].name = name;
               };
-              personal[id].issuesTotal = personal[id].issuesTotal + 1;
-              if(_.indexOf(issue.labels, 'bug') !==-1){
+
+              if(_.indexOf(issue.labels, 'bug') !==-1 && issue.state == 'closed'){
                 personal[id].bugTotal = personal[id].bugTotal + 1;
+                personal[id].issuesTotal = personal[id].issuesTotal + 1;
               };
-              if(_.indexOf(issue.labels, 'feature')!==-1){
+              if(_.indexOf(issue.labels, 'feature')!==-1 && issue.state == 'closed'){
                 personal[id].featureTotal = personal[id].featureTotal + 1;
+                personal[id].issuesTotal = personal[id].issuesTotal + 1;
               };
             };
           };
