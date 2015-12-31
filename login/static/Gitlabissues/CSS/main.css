@@ -114,3 +114,9 @@ button{
 .modal_titles{
   color: #204d74;
 }
+div.line{
+  display: none;
+}
+.helperContainer{
+  display: none;
+}
