@@ -1,55 +1,71 @@
-*{
+.row{
   padding: 0px;
   margin: 0px;
 }
-.mileStone{
-  margin: 5px 0px 0px 12px;
-  padding: 15px 15px 15px 25px;
-  border-radius: 3px;
-  border: 2px solid #eee;
-  box-shadow: 5px 5px 5px;
-  min-width: 330px;
-  max-width: 330px;
-}
+
 .search{
-  min-width: 280px;
-  margin-top: 5px;
+  max-width: 300px;
+  padding-left: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 7px;
+  margin-left: 20px;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  /*box-shadow: 2px 2px 2px;*/
+  min-height: 100%;
 }
-[isteven-multi-select] .multiSelect button[ng-bind-html]{
-  min-width: 280px;
+
+.showData{
+  padding-left: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 7px;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  /*box-shadow: 2px 2px 2px;*/
+  min-height: 100%;
+}
+
+.userData{
+  margin: 7px 7px 0px 0px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  /*box-shadow: 2px 2px 2px;*/
+  min-height: 200px;
+}
+
+
+.issueId{
+  width: 81px;
+}
+
+.issueLable{
+  background-color: #eee;
+  border-radius: 3px;
+  padding: 4px;
+  margin-left: 5px;
+}
+
+[isteven-multi-select]{
+  width: 100%;
+  max-width: 210px;
 }
 
 [isteven-multi-select] .multiSelect button[ng-bind-html].helperButton{
-  min-width: 30px;
+  max-width: 88px;
 }
 
-.tipps{
-  padding-left: 20px;
-  margin-top: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  border: 3px solid #eee ;
-  color: red;
-  border-radius: 3px;
+button{
+  width: 100%;
+  max-width: 210px;
 }
 
-.issueLabel{
-  border-radius: 3px;
-  background: #eee;
-  padding: 2px;
-  margin-left: 3px;
+.createButton{
+  margin-top: 5px;
 }
-.issueForMore{
-  min-width: 300px;
-  font-size: 18px;
-}
-.VersionIssues{
-  padding: 15px;
-  border-radius: 5px;
-  border: 2px solid #eee;
-  margin-top: 8px;
-  box-shadow: 2px 2px 2px 2px;;
-}
+
 .loginForm{
   margin-top: 150px;
 }
@@ -64,5 +80,37 @@
 .loginTitle{
   margin-left: 45px;
   font-size: 50px;
+  color: #204d74;
+}
+.selectTitle{
+  color: #204d74;
+}
+#versionData .modal-body span{
+  font-size: 17px;
+  color: #204d74;
+  font-weight: 600;
+  margin-right: 15px;
+}
+#versionData .modal-body small{
+  padding: 2px;
+  background-color: #eee;
+  border-radius: 3px;
+  margin-left: 5px;
+}
+.modalIssue{
+  border-radius: 4px;
+  box-shadow: 2px 2px 2px;
+  padding: 3px;
+  border: 1px solid #eee;
+  margin-bottom: 6px;
+}
+.modal_index{
+  border-radius: 4px;
+  padding: 2px 6px 2px 6px;
+  font-size: 16px;
+  color: blue;
+  background-color: #eee
+}
+.modal_titles{
   color: #204d74;
 }

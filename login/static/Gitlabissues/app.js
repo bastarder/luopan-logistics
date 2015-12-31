@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('GitLabApp',['LocalStorageModule','isteven-multi-select'])
+angular.module('GitLabApp',['LocalStorageModule','isteven-multi-select','ngAnimate','cgBusy'])
   .config(['localStorageServiceProvider', function(localStorageServiceProvider){
     localStorageServiceProvider.setPrefix('demoPrefix');
   }])
@@ -11,6 +11,15 @@ angular.module('GitLabApp',['LocalStorageModule','isteven-multi-select'])
         '2':'客服系统',
         '8':'后台'
       };
+      if(!value){
+        return ;
+      }
       return config[value.toString()];
     };
   })
+  .filter('date2cn', function($filter){
+  var func = $filter('date');
+  return function(input, format, timeZone){
+    return func(input, format, timeZone || '+0800');
+  };
+})

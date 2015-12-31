@@ -8,108 +8,163 @@
     .module('GitLabApp')
     .controller('GitLabController',GitLabController)
 
-    GitLabController.$inject = ['$scope','MileStoneService','TokenService','issueSearchService','issueDataDealService','localStorageService'];
+    GitLabController.$inject = ['$scope','localStorageService','UrlConfig','loginService','mileStoneService','issueByMileStoneService','issueReportService','DONT_NEED_MILESTONE'];
 
-    function GitLabController($scope,MileStoneService,TokenService,issueSearchService,issueDataDealService,localStorageService) {
+    function GitLabController($scope,localStorageService,UrlConfig,loginService,mileStoneService,issueByMileStoneService,issueReportService,DONT_NEED_MILESTONE) {
       var vm = this;
-      vm.data = null; //周报表数据统计最终结果；
-      vm.VersionIssues = null; //版本更新详情统计；
-      vm.remenberUsername = true;
-      vm.GetMileStones = GetMileStones; //获得版本号
-      vm.searchNumber = searchNumber; //生成报表
-      vm.searchVersion = searchVersion;
-      vm.selectMile = {};
-      vm.isLogin = false;
-      vm.onLogin = false;
-      //数据初始化；
-      vm.email = localStorageService.get('email')||null;
-      vm.password = null;
-      var token = localStorageService.get('pravite_token');
+      vm.selectMile = {}; //已选版本号;
+      vm.MileStone = null; //获取到得版本号;
+      vm.rememberUsername = true; //是否记住账号;
+      vm.login = login; //登陆;
+      vm.logOut = logOut; //退出登陆;
+      vm.createReport = createReport;
+      vm.reportData = null;
+      vm.createVersion = createVersion;
+      vm.versionData = null;
+      vm.isLogin = false; //用于判断是否登陆;
+      vm.param = {    //初始化登陆参数；
+        userName: null,
+        password: null
+      };
+      var token = loginService.getToken(); //判断是否登陆;
+
       if(token){
         vm.isLogin = true;
-        GetMileStones();
+        vm.UserData = localStorageService.get('UserData');
+        getMileStone();
       };
 
-      vm.login = login;
-      vm.signOut = signOut;
-
+      //登陆函数;
       function login(){
-        vm.onLogin = true;
-        TokenService.GetToken(vm.email,vm.password)
-        .then(function(data) {
-          vm.isLogin = true;
-          if(vm.remenberUsername){
-            localStorageService.set('email',vm.email);
-          }else{
-            localStorageService.remove('email');
-          }
-          GetMileStones();
-          vm.onLogin = false;
-        })
-        .catch(function(data) {
-          alert('登陆失败！');
-          vm.onLogin = false;
+        var FormIsTrue = loginFormIsTrue();
+        if(!FormIsTrue){
           return ;
-        })
-      }
+        }
+        $('#login').html('登陆中...');
+        loginService.login(vm.param)
+          .then(LoginSuccess)
+          .catch(LoginFaild)
+          //登陆成功处理
+          function LoginSuccess(response){
+            console.log('success',response);
+            vm.UserData = localStorageService.get('UserData');
+            vm.isLogin = true;
+            if(vm.rememberUsername){
+              localStorageService.set('userName',vm.param.userName||null  );
+            };
+            getMileStone();
+          };
+          //登陆失败处理
+          function LoginFaild(response){
+            console.log('faild',response);
+            $('#login').html('登陆');
+            alert('账号或密码错误!登录失败!');
+          };
+        }
 
-      function signOut(){
-        localStorageService.remove('pravite_token');
+      //退出登陆函数;
+      function logOut(){
+        localStorageService.remove('UserData');
         vm.isLogin = false;
-        vm.email = localStorageService.get('email')||null;
-        vm.password = null;
-      }
-
-      function GetMileStones(argument) {
-        MileStoneService.GetMileStones()
-          .then(SuccessGetM);
-        //回调函数；
-        function SuccessGetM(data){
-          //data: [array,array]
-          vm.mileStone = angular.copy(data);
-        }
-
-      }
-      function searchNumber() {
-        //清空旧数据
-        vm.data = null;
-        vm.VersionIssues = null;
-        if(vm.selectMile[1].length==0&&vm.selectMile[2].length==0&&vm.selectMile[8].length==0){
-          alert('请选择版本号');
-          return ;
-        }
-        document.getElementById('search').innerHTML="报表生成中...";
-        issueSearchService.GetIssues(vm.selectMile)
-          .then(function(data){
-            vm.data = issueDataDealService.Deal(data);
-          })
-      }
-      function searchVersion(){
-        for(var i in vm.selectMile){
-          if(vm.selectMile[i].length>1){
-            alert('生成BUG更新页面的时候只能每项工程选择一个版本号！');
-            return ;
-          }
+        vm.param = {    //初始化登陆参数；
+          userName: localStorageService.get('userName')||null,
+          password: null
         };
-        if(vm.selectMile[1].length==0&&vm.selectMile[2].length==0&&vm.selectMile[8].length==0){
-          alert('请选择版本号');
-          return ;
-        }
-        //清空旧数据
-        vm.data = null;
-        vm.VersionIssues = null;
-        document.getElementById('searchIssues').innerHTML="页面生成中...";
-        issueSearchService.GetIssuesForMore(vm.selectMile)
-          .then(function(data){
-            vm.VersionIssues = angular.copy(data);
-          })
       };
-      $scope.$watch('vm.data',function(n,o){
-        document.getElementById('search').innerHTML="生成报表";
-      })
-      $scope.$watch('vm.VersionIssues',function(n,o){
-        document.getElementById('searchIssues').innerHTML="生成Bug更新页面";
-      })
+
+      //获取版本号函数;
+      function getMileStone(){
+        mileStoneService.getMileStone()
+        .then(setMileStone);
+        //初始化可选的milestone
+        function setMileStone(response){
+          var result = angular.copy(response);
+          //过滤不需要的milestone列表
+          for(var i in result){
+              for(var j in result[i]){
+                if(DONT_NEED_MILESTONE.indexOf(result[i][j].id) !== -1){
+                  result[i].splice(j,1);
+                };
+               }
+           };//过滤 End；
+           vm.MileStone = result; //展示MileStone;
+        };
+      };
+      //创建Bug页面函数
+      function createVersion(){
+        //清空数据；
+        vm.versionData = null;
+        vm.reportData = null;
+        var MileStoneTrue = isSelectMileStoneBlank();
+        if(!MileStoneTrue){
+          return;
+        };
+        //开始生成；
+        $('#createVersion').html('生成中...');
+        issueByMileStoneService.getIssues(vm.selectMile).then(function(response){
+          var versionData = issueReportService.getVersionData(response);
+          console.log('versionData',versionData);
+          var times = 0;
+          for(var i in versionData){
+            times = times + 1;
+          };
+          if(times<=0){
+            alert('生成成功,但结果为空,可能是您选择版本号本身还没被创建issues,或者所有issues均未满足条件');
+          };
+          vm.versionData = versionData;
+          $('#createVersion').html('生成更新页');
+        })
+      };
+      //创建报表页面函数
+      function createReport(){
+        //清空数据；
+        vm.versionData = null;
+        vm.reportData = null;
+        var MileStoneTrue = isSelectMileStoneBlank();
+        if(!MileStoneTrue){
+          return;
+        };
+        //开始生成；
+        $('#createReport').html('生成中...');
+        issueByMileStoneService.getIssues(vm.selectMile).then(function(response){
+          var reportData ={}
+          reportData.project = issueReportService.getReportData(response);
+          reportData.personnal = issueReportService.getPersonalReportData(response);
+          console.log('ReportData',reportData);
+          var times = 0;
+          _.each(reportData,function(n){
+            for(var i in n){
+              times = times + 1;
+            };
+          });
+          if(times<=0){
+            alert('生成成功,但结果为空,可能是您选择版本号本身还没被创建issues,或者所有issues均未满足条件');
+          };
+          vm.reportData = reportData;
+          $('#createReport').html('生成报表页');
+        })
+      };
+      //查看账号密码是否输入完整函数
+      function loginFormIsTrue(){
+        if(vm.param.userName==null||vm.param.password==null){
+          alert('账号或密码为空!');
+          return false;
+        };
+        return true;
+      };
+      //判断版本号是否选择正确;
+      function isSelectMileStoneBlank(){
+        var truly = false;
+        _.each(vm.selectMile,function(n){
+          if(n.length>0){
+            truly = true;
+          };
+        });
+        if(!truly){
+          alert('请选择版本号!');
+        };
+        return truly;
+      };
       //配置select文字；
       vm.localLang = {
           selectAll       : "全选",
@@ -118,6 +173,7 @@
           search          : "输入并搜索",
           nothingSelected : "请选择版本号"
       }
+
     };//controller End
 
 })();
