@@ -1,0 +1,116 @@
+.row{
+  padding: 0px;
+  margin: 0px;
+}
+
+.search{
+  max-width: 300px;
+  padding-left: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 7px;
+  margin-left: 20px;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  /*box-shadow: 2px 2px 2px;*/
+  min-height: 100%;
+}
+
+.showData{
+  padding-left: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 7px;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  /*box-shadow: 2px 2px 2px;*/
+  min-height: 100%;
+}
+
+.userData{
+  margin: 7px 7px 0px 0px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  /*box-shadow: 2px 2px 2px;*/
+  min-height: 200px;
+}
+
+
+.issueId{
+  width: 81px;
+}
+
+.issueLable{
+  background-color: #eee;
+  border-radius: 3px;
+  padding: 4px;
+  margin-left: 5px;
+}
+
+[isteven-multi-select]{
+  width: 100%;
+  max-width: 210px;
+}
+
+[isteven-multi-select] .multiSelect button[ng-bind-html].helperButton{
+  max-width: 88px;
+}
+
+button{
+  width: 100%;
+  max-width: 210px;
+}
+
+.createButton{
+  margin-top: 5px;
+}
+
+.loginForm{
+  margin-top: 150px;
+}
+.loginForm button{
+  width: 150px;
+}
+.loginForm small{
+  margin-left: 15px;
+  font-weight: 100;
+  color: gray;
+}
+.loginTitle{
+  margin-left: 45px;
+  font-size: 50px;
+  color: #204d74;
+}
+.selectTitle{
+  color: #204d74;
+}
+#versionData .modal-body span{
+  font-size: 17px;
+  color: #204d74;
+  font-weight: 600;
+  margin-right: 15px;
+}
+#versionData .modal-body small{
+  padding: 2px;
+  background-color: #eee;
+  border-radius: 3px;
+  margin-left: 5px;
+}
+.modalIssue{
+  border-radius: 4px;
+  box-shadow: 2px 2px 2px;
+  padding: 3px;
+  border: 1px solid #eee;
+  margin-bottom: 6px;
+}
+.modal_index{
+  border-radius: 4px;
+  padding: 2px 6px 2px 6px;
+  font-size: 16px;
+  color: blue;
+  background-color: #eee
+}
+.modal_titles{
+  color: #204d74;
+}
