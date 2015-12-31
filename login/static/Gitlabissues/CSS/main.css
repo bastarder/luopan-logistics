@@ -1,0 +1,68 @@
+*{
+  padding: 0px;
+  margin: 0px;
+}
+.mileStone{
+  margin: 5px 0px 0px 12px;
+  padding: 15px 15px 15px 25px;
+  border-radius: 3px;
+  border: 2px solid #eee;
+  box-shadow: 5px 5px 5px;
+  min-width: 330px;
+  max-width: 330px;
+}
+.search{
+  min-width: 280px;
+  margin-top: 5px;
+}
+[isteven-multi-select] .multiSelect button[ng-bind-html]{
+  min-width: 280px;
+}
+
+[isteven-multi-select] .multiSelect button[ng-bind-html].helperButton{
+  min-width: 30px;
+}
+
+.tipps{
+  padding-left: 20px;
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  border: 3px solid #eee ;
+  color: red;
+  border-radius: 3px;
+}
+
+.issueLabel{
+  border-radius: 3px;
+  background: #eee;
+  padding: 2px;
+  margin-left: 3px;
+}
+.issueForMore{
+  min-width: 300px;
+  font-size: 18px;
+}
+.VersionIssues{
+  padding: 15px;
+  border-radius: 5px;
+  border: 2px solid #eee;
+  margin-top: 8px;
+  box-shadow: 2px 2px 2px 2px;;
+}
+.loginForm{
+  margin-top: 150px;
+}
+.loginForm button{
+  width: 150px;
+}
+.loginForm small{
+  margin-left: 15px;
+  font-weight: 100;
+  color: gray;
+}
+.loginTitle{
+  margin-left: 45px;
+  font-size: 50px;
+  color: #204d74;
+}
