@@ -92,6 +92,12 @@
        </div>
        <button class="btn btn-default createButton" id="createReport" ng-click="vm.createReport();">生成报表页</button>
        <button class="btn btn-default createButton" id="createVersion" ng-click="vm.createVersion();">生成更新页</button>
+       <button class="btn btn-default createButton"
+        ng-if="vm.versionData"
+        ng-click="vm.changeVersionShow = !vm.changeVersionShow">
+        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+        切换更新页模式
+       </button>
        <hr>
        <legend>
          <strong>用户信息:</strong>
@@ -161,7 +167,7 @@
          </table>
        </div>
      </div>
-     <div class="col-md-9 showData" ng-show="vm.versionData">
+     <div class="col-md-9 showData" ng-show="vm.versionData&&!vm.changeVersionShow">
        <div ng-repeat="(key,value) in vm.versionData">
          <legend>
            <strong>{{key|projectName}}</strong>
@@ -188,6 +194,15 @@
              </td>
            </tr>
          </table>
+       </div>
+     </div>
+     <div class="col-md-9 showData" ng-show="vm.versionData&&vm.changeVersionShow">
+       <div ng-repeat="(key,value) in vm.versionData">
+         【{{key|projectName}}-版本号:{{value[0].milestone.title}}】<br>
+           <span ng-repeat="issue in value">
+             &nbsp;&nbsp;{{$index+1}}:{{issue.title}}<br>
+           </span>
+          <br>
        </div>
      </div>
    </div>
