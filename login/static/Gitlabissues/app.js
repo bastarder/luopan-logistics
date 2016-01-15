@@ -17,6 +17,33 @@ angular.module('GitLabApp',['LocalStorageModule','isteven-multi-select','ngAnima
       return config[value.toString()];
     };
   })
+  .filter('mainLabel',function(){
+    return function(value){
+      var labels = value
+      var deleteLabels = ['BUG','FEATURE','👿机票组','👿酒店组','👿基础组','👿客服组'];
+      var dafaultLabels = ['👿机票组','👿酒店组','👿基础组','👿客服组'];
+      var label = null;
+      if(!labels){
+        return null;
+      }
+      for(var i=0;i<labels.length;i++){
+        if(_.indexOf(deleteLabels,labels[i])===-1){
+          label = labels[i];
+          break;
+        };
+      };
+      if(!label){
+        _.each(labels,function(la){
+          if(_.indexOf(dafaultLabels,la)===-1){
+            label =  ' ';
+          }else{
+            label = la;
+          }
+        });
+      }
+      return label;
+    };
+  })
   .filter('toIssuePage',function(){
     return function(value){
       var config = {

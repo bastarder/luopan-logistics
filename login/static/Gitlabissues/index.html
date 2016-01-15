@@ -170,45 +170,57 @@
        <div ng-repeat="(key,value) in vm.versionData">
          <legend>
            <strong>{{key|projectName}}</strong>
-           <small>{{value[0].milestone.title}}</small>
+           <small>{{value['BUG'][0].milestone.title}}</small>
          </legend>
-         <table class="table table-bordered">
-           <tr>
-             <th>序号</th>
-             <th>描述</th>
-             <th>查看详情</th>
+         <div>
+           <span class="btn btn-primary" type="button">
+              BUG <span class="badge">{{value['BUG'].length}}</span>
+           </span>
+           <span class="btn btn-success" type="button">
+              FEATURE <span class="badge">{{value['FEATURE'].length}}</span>
+           </span>
+         </div>
+         <!--issueId--> <!--issueLable-->
+         <div ng-repeat="(type,issues) in value">
+           <legend>{{type}}</legend>
+           <table class="table table-striped table-hover table-condensed">
+            <tr>
+              <th style="width:66px">序号</th>
+              <th style="width:55px">ID</th>
+              <th style="width:110px">分类</th>
+              <th>描述</th>
+              <th>解决人</th>
+            </tr>
+           <tr ng-repeat="issue in issues | orderBy: vm.versionOrder :true">
+               <td>{{$index+1}}</td>
+               <td>
+                 <a
+                  ng-href="{{vm.toIssueUrl.url}}{{issue.project_id|toIssuePage}}/issues/{{issue.iid}}"
+                  target="_blank">{{issue.iid}}</a>
+                </td>
+               <td>{{issue.labels|mainLabel}}</td>
+               <td>{{issue.title}}</td>
+               <td>{{issue.assignee.name}}</td>
            </tr>
-           <tr ng-repeat="issue in value">
-             <td class="issueId">{{$index+1}}</td>
-             <td>
-               {{issue.title}}
-               <span class="issueLable" ng-repeat="label in issue.labels">
-                 {{label}}
-               </span>
-             </td>
-             <td>
-                <span class="btn" ng-click="vm.curIssueVersion = issue;" data-toggle="modal" data-target="#versionData">
-                  查看详情
-                </span>
-             </td>
-           </tr>
-         </table>
+           </table>
+         </div>
        </div>
      </div>
      <div class="col-md-9 showData" ng-show="vm.versionData&&vm.changeVersionShow">
        <div ng-repeat="(key,value) in vm.versionData">
          【{{key|projectName}}-版本号:{{value[0].milestone.title}}】<br>
-           <span ng-repeat="issue in value">
-             &nbsp;&nbsp;{{$index+1}}:{{issue.title}}<br>
-           </span>
-          <br>
+          <div ng-repeat="(type,issues) in value">
+            {{type}}:<br>
+            <div ng-repeat="issue in issues | orderBy: vm.versionOrder :true">
+               &nbsp;&nbsp;{{$index+1}}:{{issue.title}}<br>
+            </div>
        </div>
      </div>
    </div>
    <!--modal-->
 
 <!-- Modal versionData-->
-<div class="modal fade" id="versionData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- <div class="modal fade" id="versionData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -226,12 +238,12 @@
       <div class="modal-footer">
          <a class="btn btn-default"
          ng-href="{{vm.toIssueUrl.url}}{{vm.curIssueVersion.project_id|toIssuePage}}/issues/{{vm.curIssueVersion.iid}}"
-         target="_blank">跳转到指定BUG</a>
+         target="_blank">详情</a>
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- Modal reportData-->
 <div class="modal fade" id="reportData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

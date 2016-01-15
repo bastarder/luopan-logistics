@@ -23,6 +23,7 @@
       vm.createVersion = createVersion;
       vm.versionData = null;
       vm.isLogin = false; //用于判断是否登陆;
+      vm.versionOrder = versionOrder;//更新页面BUG分类;
       vm.param = {    //初始化登陆参数；
         userName: null,
         password: null
@@ -165,6 +166,21 @@
           alert('请选择版本号!');
         };
         return truly;
+      };
+      function versionOrder(issue){
+        var labels = issue.labels;
+        var deleteLabels = ['BUG','FEATURE','👿机票组','👿酒店组','👿基础组','👿客服组'];
+        var label = null;
+        if(!labels){
+          return null;
+        }
+        for(var i=0;i<labels.length;i++){
+          if(_.indexOf(deleteLabels,labels[i])===-1){
+            label = labels[i];
+            break;
+          };
+        };
+        return label;
       };
       //配置select文字；
       vm.localLang = {

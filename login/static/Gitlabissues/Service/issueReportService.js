@@ -145,6 +145,13 @@
           };
           //准备开始统计
           var record = record.closed;
+          //分为 BUG 和 FEATURE 2组;
+          var record = _.groupBy(record,function(issue){
+            if(_.indexOf(issue.labels, 'BUG')!==-1){
+              return 'BUG';
+            }
+            return 'FEATURE';
+          });
           results[project_id] = record;
         };
 
