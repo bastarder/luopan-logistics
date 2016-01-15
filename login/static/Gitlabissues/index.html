@@ -172,22 +172,18 @@
            <strong>{{key|projectName}}</strong>
            <small>{{value['BUG'][0].milestone.title}}</small>
          </legend>
-         <div>
-           <span class="btn btn-primary" type="button">
-              BUG <span class="badge">{{value['BUG'].length}}</span>
-           </span>
-           <span class="btn btn-success" type="button">
-              FEATURE <span class="badge">{{value['FEATURE'].length}}</span>
-           </span>
-         </div>
          <!--issueId--> <!--issueLable-->
          <div ng-repeat="(type,issues) in value">
-           <legend>{{type}}</legend>
+           <legend>
+             <span class="btn" ng-class="{'btn-danger':type==='BUG','btn-success':type==='FEATURE'}" type="button">
+                {{type}} <span class="badge">{{issues.length}}</span>
+             </span>
+           </legend>
            <table class="table table-striped table-hover table-condensed">
             <tr>
-              <th style="width:66px">序号</th>
-              <th style="width:55px">ID</th>
-              <th style="width:110px">分类</th>
+              <th>序号</th>
+              <th>ID</th>
+              <th>分类</th>
               <th>描述</th>
               <th>解决人</th>
             </tr>
