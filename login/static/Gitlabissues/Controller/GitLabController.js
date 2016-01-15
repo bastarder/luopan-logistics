@@ -8,11 +8,12 @@
     .module('GitLabApp')
     .controller('GitLabController',GitLabController)
 
-    GitLabController.$inject = ['$scope','localStorageService','UrlConfig','loginService','mileStoneService','issueByMileStoneService','issueReportService','DONT_NEED_MILESTONE'];
+    GitLabController.$inject = ['$scope','localStorageService','UrlConfig','loginService','mileStoneService','issueByMileStoneService','issueReportService','DONT_NEED_MILESTONE','TO_ISSUE_PAGE'];
 
-    function GitLabController($scope,localStorageService,UrlConfig,loginService,mileStoneService,issueByMileStoneService,issueReportService,DONT_NEED_MILESTONE) {
+    function GitLabController($scope,localStorageService,UrlConfig,loginService,mileStoneService,issueByMileStoneService,issueReportService,DONT_NEED_MILESTONE,TO_ISSUE_PAGE) {
       var vm = this;
       vm.selectMile = {}; //已选版本号;
+      vm.toIssueUrl = TO_ISSUE_PAGE //跳转到指定issue;
       vm.MileStone = null; //获取到得版本号;
       vm.rememberUsername = true; //是否记住账号;
       vm.login = login; //登陆;

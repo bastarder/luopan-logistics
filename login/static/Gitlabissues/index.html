@@ -29,7 +29,6 @@
  </head>
 
  <body ng-app="GitLabApp" ng-controller="GitLabController as vm" >
-
    <div class="row" ng-show="vm.isLogin">
 
    </div>
@@ -225,6 +224,9 @@
         <span>标签:</span> <small ng-repeat="label in vm.curIssueVersion.labels"> {{label}} </small><br/>
       </div>
       <div class="modal-footer">
+         <a class="btn btn-default"
+         ng-href="{{vm.toIssueUrl.url}}{{vm.curIssueVersion.project_id|toIssuePage}}/issues/{{vm.curIssueVersion.iid}}"
+         target="_blank">跳转到指定BUG</a>
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
       </div>
     </div>

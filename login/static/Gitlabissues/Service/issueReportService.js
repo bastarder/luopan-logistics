@@ -62,10 +62,10 @@
                 result[id] ={};
                 for(var j=0;j<group.length;j++){
                   var issue = group[j];
-                  if(_.indexOf(issue.labels, 'bug') !==-1){
+                  if(_.indexOf(issue.labels, 'BUG') !==-1){
                     bugTotal.push(issue);
                   };
-                  if(_.indexOf(issue.labels, 'feature')!==-1){
+                  if(_.indexOf(issue.labels, 'FEATURE')!==-1){
                     featureTotal.push(issue);
                   };
                 };//for end
